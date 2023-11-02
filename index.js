@@ -1,14 +1,18 @@
+import 'dotenv/config.js'
+
 import chalk from 'chalk';
 import Express from 'express';
 import swaggerUi from 'swagger-ui-express';
 
-import { configDotenv } from 'dotenv';
-configDotenv();
+import connectDB from './config/MongoConnect.js';
+
 
 import {generateSwaggerFile, loadSwaggerFile} from './swagger.js';
 generateSwaggerFile();
 
 const PORT = process.env.PORT || 3000;
+
+connectDB();
 
 // ROTAS
 import root from './routes/root.js';
@@ -16,9 +20,11 @@ import categoryRoute from './routes/categoryRoute.js';
 import gameRoute from './routes/gameRoute.js';
 import ratingRoute from './routes/ratingRoute.js';
 import userRoute from './routes/userRoute.js';
+import mongoose from 'mongoose';
 
 
 const app = Express();
+app.use(Express.urlencoded({extended: false}));
 
 app.use('/', root);
 app.use('/category', categoryRoute);
@@ -33,6 +39,8 @@ app.use('*', (req, res) => {
     res.json({message: "404 - not found"});
 })
 
-app.listen(PORT, () => {
-    console.log(`Server listening to port: ${chalk.green(PORT)}`)
+mongoose.connection.once('open', () => {
+    app.listen(PORT, () => {
+        console.log(`Servidor aberto no port: ${chalk.green(PORT)}`)
+    })
 })

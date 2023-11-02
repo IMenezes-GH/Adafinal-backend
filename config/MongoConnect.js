@@ -1,11 +1,12 @@
 import { connect } from "mongoose";
+import chalk from "chalk";
 
-const DB_URI = process.env.MONGODB_URI;
+const MONGODB_URI = process.env.MONGODB_URI;
 
 const connectDB = async () => {
     try {
-        await connect(DB_URI);
-        console.log(chalk.green('MongoDB connected succesfully'));
+        await connect(MONGODB_URI);
+        console.log((`Database: ${chalk.green('MongoDB connected succesfully')}`));
 
     } catch (err){
         console.log(chalk.red(err.message));
