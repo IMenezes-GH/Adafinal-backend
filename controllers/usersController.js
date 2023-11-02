@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import User from '../models/User.js';
 import bcrypt from 'bcrypt';
 import ValidationContract from '../validation/validationContract.js';
+import { json } from 'express';
 
 /**
  * 
@@ -77,18 +78,55 @@ export const createUser = async (req, res) => {
             active
         }
 
-        await User.create(newUser);
-        res.sendStatus(201);
+        const createdUser = await User.create(newUser);
+        res.status(201).json({message: `Usuário: ${createdUser._id} criado.`});
 
     } catch (err) {
         res.status(500).json(err.message);
     } 
 }
 export const updateUser = async (req, res) => {
-    
+
+    const {id, name, email, password, birthDate, country, state} = req.body;
+    if (!name || !email || !password) return res.status(405).json({message: 'Nome, email e senha são campos obrigatórios.'});
+
     try {
+        const user = await User.findById(id).exec();
 
+        const contract = new ValidationContract();
+        
+        //Validações de nome
+        contract.hasMinLen(name, 3, 'O nome deve conter pelo menos 3 caracteres. ');
+        contract.hasMaxLen(name, 255, 'O nome deve conter no máximo 255 caracteres. ');
+        
+        //Validações de e-mail
+        contract.isEmail(email, 'E-mail inválido. ');
+        contract.hasMinLen(email, 3, 'O e-mail deve conter pelo menos 3 caracteres. ');
+        contract.hasMaxLen(email, 128, 'O e-mail deve conter no máximo 128 caracteres. ');
 
+        const duplicate = await User.findOne({email}).select('-password').lean().exec();
+        if (duplicate && duplicate._id.toString() !== id) return res.sendStatus(409); // Conflito
+        
+        //Validações de senha
+        contract.hasMinLen(password, 6, 'A senha deve conter pelo menos 6 caracteres. ');
+
+        user.name = name ?? user.name;
+        user.email = email ?? user.email;
+        user.birthDate = birthDate ?? user.birthDate;
+        user.country = country ?? user.country;
+        user.state = state ?? user.state;
+        
+
+        if (password) {
+            const hashPwd = await bcrypt.hash(password, Number(process.env.SALT_KEY));
+            user.password = hashPwd;
+        }
+     
+        const updatedUser = await user.save();
+        if (updateUser){
+            return res.json({message: 'Usuário atualizado.', user: updatedUser});
+        }
+        else return res.sendStatus(400);
 
     } catch (err) {
         res.status(500).json(err.message);
@@ -96,9 +134,15 @@ export const updateUser = async (req, res) => {
 }
 export const deleteUser = async (req, res) => {
     
+    const {id} = req.body;
+    if (!id) return res.status(400).json({message: 'Id é obrigatório'});
+
     try {
+        const user = await User.findById(id).exec();
+        if (!user) return res.sendStatus(404);
 
-
+        const deletedUser = await user.deleteOne();
+        return res.json({message: `usuário ${deletedUser.name} deletado`})
 
     } catch (err) {
         res.status(500).json(err.message);
