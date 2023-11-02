@@ -157,6 +157,9 @@
             "schema": {
               "type": "object",
               "properties": {
+                "birthDate": {
+                  "example": "any"
+                },
                 "name": {
                   "example": "any"
                 },
@@ -166,7 +169,7 @@
                 "password": {
                   "example": "any"
                 },
-                "birthDate": {
+                "confirmPassword": {
                   "example": "any"
                 },
                 "country": {
@@ -217,12 +220,34 @@
         }
       }
     },
-    "/users/{id([0-9a-f]{24},getUserById)exportdefaultrouter;}": {
+    "/users/{id}": {
       "get": {
         "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
         "responses": {
-          "default": {
-            "description": ""
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "405": {
+            "description": "Method Not Allowed"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
