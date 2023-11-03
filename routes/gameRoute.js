@@ -1,11 +1,12 @@
 import { Router } from "express";
+import { getGameById, createGame, updateGame, deleteGame } from "../controllers/gameController.js";
 
 const router = Router();
 
 router.route('/')
-    .get((req, res) => {return res.json({message: "Game"})})
-    .post((req, res) => {return res.json({message: "Post game"})})
-    .patch((req, res) => {return res.json({message: "Patch game"})})
-    .delete((req, res) => {return res.json({message: "Delete game"})})
+    .get(getGameById)
+    .post(createGame)
+    .patch(updateGame)
+    .delete(deleteGame)
 
 export default router;
