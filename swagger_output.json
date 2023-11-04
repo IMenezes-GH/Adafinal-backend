@@ -297,8 +297,8 @@
           }
         ],
         "responses": {
-          "201": {
-            "description": "Created"
+          "200": {
+            "description": "OK"
           },
           "405": {
             "description": "Method Not Allowed"

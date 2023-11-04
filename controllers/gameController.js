@@ -52,12 +52,10 @@ export const createGame = async (req, res) => {
         const contract = new ValidationContract();
         
         //Validações de nome
-        contract.isRequired(name, 'O nome é obrigatório. ');
         contract.hasMinLen(name, 3, 'O nome deve conter pelo menos 3 caracteres. ');
         contract.hasMaxLen(name, 255, 'O nome deve conter no máximo 255 caracteres. ');
         
         //Validações de descrição
-        contract.isRequired(description, 'O e-mail é obrigatório. ');
         contract.hasMinLen(description, 3, 'A descrição deve conter pelo menos 3 caracteres. ');
         contract.hasMaxLen(description, 128, 'A descrição deve conter no máximo 128 caracteres. ');
 
@@ -93,14 +91,16 @@ export const updateGame = async (req, res) => {
         const game = await Game.findById(id).exec();
         
         //Validações de nome
-        contract.isRequired(name, 'O nome é obrigatório. ');
-        contract.hasMinLen(name, 3, 'O nome deve conter pelo menos 3 caracteres. ');
-        contract.hasMaxLen(name, 255, 'O nome deve conter no máximo 255 caracteres. ');
+        if (name){
+            contract.hasMinLen(name, 3, 'O nome deve conter pelo menos 3 caracteres. ');
+            contract.hasMaxLen(name, 255, 'O nome deve conter no máximo 255 caracteres. ');
+        }
         
         //Validações de descrição
-        contract.isRequired(email, 'O e-mail é obrigatório. ');
-        contract.hasMinLen(email, 3, 'A descrição deve conter pelo menos 3 caracteres. ');
-        contract.hasMaxLen(email, 128, 'A descrição deve conter no máximo 128 caracteres. ');
+        if (description){
+            contract.hasMinLen(description, 3, 'A descrição deve conter pelo menos 3 caracteres. ');
+            contract.hasMaxLen(description, 128, 'A descrição deve conter no máximo 128 caracteres. ');
+        }
 
 
         if(!contract.isValid()){
@@ -120,7 +120,7 @@ export const updateGame = async (req, res) => {
     
 
         const updatedGame = await game.save();
-        res.status(201).json({message: `jogo: ${updatedGame._id} Atualizado.`});
+        res.json({message: `jogo: ${updatedGame._id} Atualizado.`});
 
     } catch (err) {
         res.status(500).json(err.message);
