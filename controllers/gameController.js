@@ -1,8 +1,18 @@
 import mongoose from 'mongoose';
 import Game from '../models/Game.js'
-import bcrypt from 'bcrypt';
 import ValidationContract from '../validation/validationContract.js';
-import { json } from 'express';
+
+
+export const getAllGames = async (req, res) => {
+    try {
+        const games = await Game.find({}).lean().exec();
+        res.json(games);
+
+    } catch (err){
+        res.status(500).json(err.message);
+    }
+}
+
 
 /**
  * 
