@@ -4,6 +4,7 @@ const schema = Schema({
     name: {
         type: Schema.Types.String,
         required: true,
+        unique: true,
         trim: true,
     },
     active: {

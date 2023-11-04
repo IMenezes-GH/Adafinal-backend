@@ -1,11 +1,14 @@
 import { Router } from "express";
+import { getCategory, createNewCategory, updateCategory } from "../controllers/categoryController.js";
 
 const router = Router();
 
 router.route('/')
-    .get((req, res) => {return res.json({message: "Category"})})
-    .post((req, res) => {return res.json({message: "Post category"})})
-    .patch((req, res) => {return res.json({message: "Patch category"})})
-    .delete((req, res) => {return res.json({message: "Delete category"})})
+    .get(getCategory)
+    .post(createNewCategory)
+    .patch(updateCategory)
+
+router.route('/:name')
+    .get(getCategory)
 
 export default router;
