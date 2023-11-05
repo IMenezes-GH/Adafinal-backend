@@ -23,8 +23,8 @@ export const getAllGames = async (req, res) => {
 export const getGameById = async (req, res) => {
 
     const id = req.query.id || req.params.id;
-    if (!id) return res.status(405).json({message: 'Campo id é obrigatório'});
-    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(405).json({message: "id inválido"})
+    if (!id) return res.status(400).json({message: 'Campo id é obrigatório'});
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(400).json({message: "id inválido"})
 
     try {
         const game = await Game.findById(id).exec();
@@ -46,7 +46,7 @@ export const getGameById = async (req, res) => {
 export const createGame = async (req, res) => {
     
     const {name, description, category, url, imageURL, videoURL} = req.body;
-    if (!name || !description || !url || !imageURL) return res.status(405).json({message: 'Nome, description, url, imageURL obrigatórios'});
+    if (!name || !description || !url || !imageURL) return res.status(400).json({message: 'Nome, description, url, imageURL obrigatórios'});
 
     try {
         const contract = new ValidationContract();
@@ -84,7 +84,7 @@ export const createGame = async (req, res) => {
 export const updateGame = async (req, res) => {
 
     const {id, name, description, category, url, imageURL, videoURL, active, score, ratings} = req.body;
-    if (!id) return res.status(405).json({message: 'Id obrigatórios'});
+    if (!id) return res.status(400).json({message: 'Id obrigatórios'});
 
     try {
         const contract = new ValidationContract();

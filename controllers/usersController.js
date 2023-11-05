@@ -36,7 +36,7 @@ export const getUserById = async (req, res) => {
 export const createUser = async (req, res) => {
     
     const {name, email, password, confirmPassword, birthDate, country, state, roles, active} = req.body;
-    if (!name || !email || !password) return res.status(405).json({message: 'Nome, email e senha são campos obrigatórios.'});
+    if (!name || !email || !password) return res.status(400).json({message: 'Nome, email e senha são campos obrigatórios.'});
 
     try {
         const contract = new ValidationContract();
@@ -88,7 +88,7 @@ export const createUser = async (req, res) => {
 export const updateUser = async (req, res) => {
 
     const {id, name, email, password, birthDate, country, state} = req.body;
-    if (!name || !email || !password) return res.status(405).json({message: 'Nome, email e senha são campos obrigatórios.'});
+    if (!name || !email || !password) return res.status(400).json({message: 'Nome, email e senha são campos obrigatórios.'});
 
     try {
         const user = await User.findById(id).exec();

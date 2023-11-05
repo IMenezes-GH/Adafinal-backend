@@ -9,7 +9,7 @@ export const getCategory = async(req, res) => {
     try {
         if (name) {
             const category = await Category.findOne({name}).lean().exec();
-            if (!category) return res.sendStatus(404);
+            if (!category) return res.status(404).json({message: 'Categoria não existe'});
     
             return res.json(category);
         }
@@ -24,7 +24,7 @@ export const getCategory = async(req, res) => {
 
 export const createNewCategory = async(req, res) => {
     const {name, active} = req.body;
-    if (!name) return res.sendStatus(405);
+    if (!name) return res.sendStatus(400);
 
     try {
         const duplicate = await Category.findOne({name}).lean().exec();
@@ -45,7 +45,7 @@ export const createNewCategory = async(req, res) => {
 
 export const updateCategory = async (req, res) => {
     const {id, name, newname, active} = req.body;
-    if (!id && !name) return res.sendStatus(405); // Pelo menos um dos atributos é necessário
+    if (!id && !name) return res.sendStatus(400); // Pelo menos um dos atributos é necessário
 
     try {
         const category = await Category.findOne({$or: [{name}, {_id: id}]}).exec();

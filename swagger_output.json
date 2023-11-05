@@ -66,8 +66,8 @@
           "201": {
             "description": "Created"
           },
-          "405": {
-            "description": "Method Not Allowed"
+          "400": {
+            "description": "Bad Request"
           },
           "409": {
             "description": "Conflict"
@@ -103,11 +103,11 @@
           "200": {
             "description": "OK"
           },
+          "400": {
+            "description": "Bad Request"
+          },
           "404": {
             "description": "Not Found"
-          },
-          "405": {
-            "description": "Method Not Allowed"
           },
           "409": {
             "description": "Conflict"
@@ -168,11 +168,11 @@
           "200": {
             "description": "OK"
           },
+          "400": {
+            "description": "Bad Request"
+          },
           "404": {
             "description": "Not Found"
-          },
-          "405": {
-            "description": "Method Not Allowed"
           },
           "500": {
             "description": "Internal Server Error"
@@ -213,6 +213,9 @@
         "responses": {
           "201": {
             "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "405": {
             "description": "Method Not Allowed"
@@ -299,6 +302,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "405": {
             "description": "Method Not Allowed"
@@ -461,6 +467,9 @@
           "201": {
             "description": "Created"
           },
+          "400": {
+            "description": "Bad Request"
+          },
           "405": {
             "description": "Method Not Allowed"
           },
@@ -543,9 +552,6 @@
           },
           "400": {
             "description": "Bad Request"
-          },
-          "405": {
-            "description": "Method Not Allowed"
           },
           "409": {
             "description": "Conflict"
