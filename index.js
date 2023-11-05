@@ -20,6 +20,8 @@ import categoryRoute from './routes/categoryRoute.js';
 import gameRoute from './routes/gameRoute.js';
 import ratingRoute from './routes/ratingRoute.js';
 import userRoute from './routes/userRoute.js';
+import authRoute from './routes/AuthRoute.js';
+
 import mongoose from 'mongoose';
 
 
@@ -31,6 +33,7 @@ app.use('/category', categoryRoute);
 app.use('/games', gameRoute);
 app.use('/ratings', ratingRoute);
 app.use('/users', userRoute);
+app.use('/auth', authRoute);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(loadSwaggerFile()));
 
 // 404
