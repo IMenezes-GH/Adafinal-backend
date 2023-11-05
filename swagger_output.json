@@ -640,8 +640,14 @@
       "post": {
         "description": "",
         "responses": {
-          "default": {
-            "description": ""
+          "208": {
+            "description": "Already Reported"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }

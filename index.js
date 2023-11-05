@@ -1,8 +1,11 @@
 import 'dotenv/config.js'
 
+import cors from 'cors';
+
 import chalk from 'chalk';
 import Express from 'express';
 import swaggerUi from 'swagger-ui-express';
+import cookieParser from 'cookie-parser';
 
 import connectDB from './config/MongoConnect.js';
 
@@ -26,7 +29,10 @@ import mongoose from 'mongoose';
 
 
 const app = Express();
+app.use(cors());
 app.use(Express.urlencoded({extended: false}));
+app.use('/auth', cookieParser());
+
 
 app.use('/', root);
 app.use('/category', categoryRoute);

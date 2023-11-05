@@ -45,11 +45,15 @@ const userSchema = Schema({
     },
 
     active: {
-        type: Boolean,
+        type: Schema.Types.Boolean,
         require: true,
         default: true
-    }
+    },
+    
+    refreshToken: {
+        type: Schema.Types.String
 
+    }
 });
 
 const User = model('User', userSchema);
