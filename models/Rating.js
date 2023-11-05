@@ -15,12 +15,14 @@ const schema = Schema({
 
     game: {
         type: Schema.Types.ObjectId,
-        ref: 'Game'
+        ref: 'Game',
+        required: [true, 'Jogo é obrigatório']
     },
 
     user: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: [true, 'Usuário é obrigatório.']
     },
 
 });
