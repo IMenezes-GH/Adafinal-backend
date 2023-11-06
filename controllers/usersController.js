@@ -10,14 +10,16 @@ import { json } from 'express';
  * @param {*} res 
  * @returns 
  */
-export const getUserById = async (req, res) => {
+export const getUser = async (req, res) => {
 
     const id = req.query.id || req.params.id;
-    if (!id) return res.status(405).json({message: 'Campo id de usuário é obrigatório'});
-    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(405).json({message: "id de usuário inválido"})
+    const email = req.query.email;
+
+    if (!id && !email) return res.status(405).json({message: 'Campo id de usuário é obrigatório'});
+    if (id && !mongoose.Types.ObjectId.isValid(id)) return res.status(405).json({message: "id de usuário inválido"})
 
     try {
-        const user = await User.findById(id).select('-password').lean().exec();
+        const user = await User.findOne({$or: [{_id: id}, {email}]}).select('-password').lean().exec();
         if (!user) return res.status(404).json({message: 'Usuário não foi encontrado.'});
 
         res.json(user);

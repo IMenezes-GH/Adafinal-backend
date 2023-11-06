@@ -1,17 +1,18 @@
 import { Router } from "express";
-import { getUserById, createUser, updateUser, deleteUser } from "../controllers/usersController.js";
+import { getUser, createUser, updateUser, deleteUser } from "../controllers/usersController.js";
 import JWTVerify from "../middleware/JWTVerify.js";
 
 const router = Router();
 
 router.route('/')
-    .get(getUserById)
-    .post(createUser)
+    .get(getUser)
+    .post(createUser);
+    
+router.use(JWTVerify); //PRIVATE ROUTES
+    
+router.route('/:id')
+    .get(getUser)
     .patch(updateUser)
     .delete(deleteUser)
-
-router.use(JWTVerify);
-router.route('/:id')
-    .get(getUserById)
 
 export default router;

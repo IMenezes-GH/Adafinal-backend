@@ -12,9 +12,15 @@ const JWTVerify = (req, res, next) => {
         process.env.ACCESS_TOKEN_SECRET, 
         (err, decoded) => {
             console.log(err, decoded)
-            if (err) return res.sendStatus(403);
-            req.user = decoded;
-            next()
+            if (user.roles = 'admin') {
+                req.user = decoded;
+                next();
+            }
+            else {
+                if (err) return res.sendStatus(403);
+                req.user = decoded;
+                next()
+            }
         }
     )
 }
