@@ -1,9 +1,15 @@
 import Rating from "../models/Rating.js";
 import { isValidObjectId } from "mongoose";
 
+
+/**
+ * @desc Pesquisa avaliações por jogo
+ * @route GET /games?id=param1&game=param2&user=param3&min=param4&max=param5
+ * @access PUBLIC
+ */
 export const getRating = async (req, res) => {
 
-    const {id, game, user} = req.query;
+    const {id, game, user, min, max} = req.query;
 
     try {
 
@@ -14,7 +20,10 @@ export const getRating = async (req, res) => {
 
         if (![id, game, user].every((objectId) => isValidObjectId(objectId))) return res.status(405).json({message: 'Id inválido'});
         
-        const rating = await Rating.find({$or: [{_id: id}, {game}, {user}]}).lean().exec();
+        const rating = await Rating.find(
+            {$or: [{_id: id}, {game}, {user}]})
+            .skip(min).limit(max)
+            .lean().exec();
         res.json(rating);
 
     } catch (err){
@@ -22,6 +31,11 @@ export const getRating = async (req, res) => {
     }
 }
 
+/**
+ * @desc Cadastra uma avaliação
+ * @route POST /rating
+ * @access PRIVATE
+ */
 export const createRating = async(req, res) => {
 
     const {score, description, game, user} = req.body;

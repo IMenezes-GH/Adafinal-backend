@@ -1,14 +1,25 @@
 import Category from "../models/Category.js";
 import { stringToBool } from "../util/parseUtil.js";
 
-
+/**
+ * @desc Recupera uma ou várias categorias
+ * @route GET /category?name=param1
+ * @access PUBLIC
+ */
 export const getCategory = async(req, res) => {
 
-    const name = req.query.name || req.params.name;
+    const id = req.body.id;
+    const name = req.query.name || req.params.id;
 
     try {
         if (name) {
-            const category = await Category.findOne({name}).lean().exec();
+            const category = await Category.findOne(
+                {$or: [
+                    {name: {$regex: name, $options: 'i'}}, 
+                    {_id: id}
+                ]})
+                .lean().exec();
+
             if (!category) return res.status(404).json({message: 'Categoria não existe'});
     
             return res.json(category);
@@ -22,6 +33,11 @@ export const getCategory = async(req, res) => {
     }
 }
 
+/**
+ * @desc Cadastra uma categoria
+ * @route POST /category
+ * @access PRIVATE
+ */
 export const createNewCategory = async(req, res) => {
     const {name, active} = req.body;
     if (!name) return res.sendStatus(400);
@@ -43,6 +59,11 @@ export const createNewCategory = async(req, res) => {
     }
 }
 
+/**
+ * @desc Atualiza uma categoria
+ * @route PATCH /category
+ * @access PRIVATE
+ */
 export const updateCategory = async (req, res) => {
     const {id, name, newname, active} = req.body;
     if (!id && !name) return res.sendStatus(400); // Pelo menos um dos atributos é necessário

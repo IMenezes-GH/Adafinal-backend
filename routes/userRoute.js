@@ -10,11 +10,9 @@ router.route('/')
     .get(getUser)
     .post(createUser);
     
-router.use(JWTVerify); //PRIVATE ROUTES
-    
 router.route('/:id')
     .get(getUser)
-    .patch(updateUser)
-    .delete(deleteUser)
+    .patch(JWTVerify, updateUser)
+    .delete(JWTVerify, deleteUser)
 
 export default router;

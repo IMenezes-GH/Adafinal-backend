@@ -2,10 +2,14 @@ import mongoose from 'mongoose';
 import Game from '../models/Game.js'
 import ValidationContract from '../validation/validationContract.js';
 
-
+/**
+ * @desc Recupera todos os jogos
+ * @route GET /games/all
+ * @access PUBLIC
+ */
 export const getAllGames = async (req, res) => {
     try {
-        const games = await Game.find({}).lean().exec();
+        const games = await Game.find().lean().exec();
         res.json(games);
 
     } catch (err){
@@ -13,16 +17,34 @@ export const getAllGames = async (req, res) => {
     }
 }
 
+/**
+ * @desc Recupera um jogo por nome
+ * @route GET /games?name=param1
+ * @access PUBLIC
+ */
+export const getGamesByName = async (req, res) => {
+    const name = req.query.name;
+    if (!name) return res.status(400).sendStatus({message: 'name é obrigatório'});
+
+    try {
+        const games = await Game.find({name: {$regex: name}}).lean().exec();
+        res.json(games);
+
+    } catch (err) {
+        res.status(500).json(err.message);
+    } 
+
+}
 
 /**
- * 
- * @param {*} req 
- * @param {*} res 
- * @returns 
+ * @desc Recupera um jogo por ID
+ * @route GET /games/:id
+ * @access PUBLIC
  */
 export const getGameById = async (req, res) => {
 
-    const id = req.query.id || req.params.id;
+    const id = req.params.id;
+
     if (!id) return res.status(400).json({message: 'Campo id é obrigatório'});
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(400).json({message: "id inválido"})
 
@@ -38,10 +60,9 @@ export const getGameById = async (req, res) => {
 }
 
 /**
- * Cria um usuário
- * @param {Request} req Objeto Request do Express
- * @param {Response} res Objeto Response do Express
- * @returns {Response} resposta do request realizado
+ * @desc Cadastra um jogo
+ * @route POST /games
+ * @access PRIVATE
  */
 export const createGame = async (req, res) => {
     
@@ -84,6 +105,12 @@ export const createGame = async (req, res) => {
         res.status(500).json(err.message);
     } 
 }
+
+/**
+ * @desc Atualiza um jogo
+ * @route PATCH /games
+ * @access PRIVATE
+ */
 export const updateGame = async (req, res) => {
 
     const {id, name, description, category, url, imageURL, videoURL, active, score, ratings} = req.body;
@@ -129,6 +156,12 @@ export const updateGame = async (req, res) => {
         res.status(500).json(err.message);
     } 
 }
+
+/**
+ * @desc Exclui um jogo
+ * @route DELETE /games
+ * @access PRIVATE
+ */
 export const deleteGame = async (req, res) => {
     
     const {id} = req.body;

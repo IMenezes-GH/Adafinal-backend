@@ -4,10 +4,9 @@ import bcrypt from 'bcrypt';
 import ValidationContract from '../validation/validationContract.js';
 
 /**
- * GET vários Usuários aceitando como parâmetros nome (para busca aproximada), mínimo e máximo (para limitar número de documentos)
- * @param {Request} req Objeto Request do Express
- * @param {Response} res Objeto Response do Express
- * @returns {Response} resposta do request realizado
+ * @desc Recupera uma lista de usuários
+ * @route GET /users?min=param1&max=param2&name=param3
+ * @access PUBLIC
  */
 export const getUsers = async (req, res) => {
 
@@ -34,10 +33,9 @@ export const getUsers = async (req, res) => {
 
 
 /**
- * GET um único usuário utilizando id ou email do usuário, por parâmetro ou query.
- * @param {Request} req Objeto Request do Express
- * @param {Response} res Objeto Response do Express
- * @returns {Response} resposta do request realizado
+ * @desc GET um único usuário utilizando id ou email do usuário, por parâmetro ou query.
+ * @route GET /users/:id, GET /users?id=param1
+ * @access PUBLIC
  */
 export const getUser = async (req, res) => {
 
@@ -63,10 +61,9 @@ export const getUser = async (req, res) => {
 }
 
 /**
- * Cria um usuário
- * @param {Request} req Objeto Request do Express
- * @param {Response} res Objeto Response do Express
- * @returns {Response} resposta do request realizado
+ * @desc Cadastra um usuário
+ * @route POST /users
+ * @access PUBLIC
  */
 export const createUser = async (req, res) => {
     
@@ -123,10 +120,9 @@ export const createUser = async (req, res) => {
 
 
 /**
- * Atualiza um usuário
- * @param {Request} req Objeto Request do Express
- * @param {Response} res Objeto Response do Express
- * @returns {Response} resposta do request realizado
+ * @desc Atualiza um usuário
+ * @route PATCH /users
+ * @access PRIVATE
  */
 export const updateUser = async (req, res) => {
 
@@ -175,6 +171,12 @@ export const updateUser = async (req, res) => {
         res.status(500).json(err.message);
     } 
 }
+
+/**
+ * @desc Deleta um usuário
+ * @route DELETE /users
+ * @access PRIVATE
+ */
 export const deleteUser = async (req, res) => {
     
     const {id} = req.body;

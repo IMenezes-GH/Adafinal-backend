@@ -39,6 +39,16 @@
             "name": "user",
             "in": "query",
             "type": "string"
+          },
+          {
+            "name": "min",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "max",
+            "in": "query",
+            "type": "string"
           }
         ],
         "responses": {
@@ -423,25 +433,12 @@
         }
       }
     },
-    "/games/all": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
     "/games/": {
       "get": {
         "description": "",
         "parameters": [
           {
-            "name": "id",
+            "name": "name",
             "in": "query",
             "type": "string"
           }
@@ -452,9 +449,6 @@
           },
           "400": {
             "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -600,6 +594,46 @@
         }
       }
     },
+    "/games/all": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/games/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/category/": {
       "get": {
         "description": "",
@@ -694,12 +728,12 @@
         }
       }
     },
-    "/category/{name}": {
+    "/category/{id}": {
       "get": {
         "description": "",
         "parameters": [
           {
-            "name": "name",
+            "name": "id",
             "in": "path",
             "required": true,
             "type": "string"

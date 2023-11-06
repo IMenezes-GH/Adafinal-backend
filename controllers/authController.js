@@ -2,6 +2,12 @@ import User from "../models/User.js";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
+
+/**
+ * @desc Login de usuário
+ * @route POST /auth/login
+ * @access PUBLIC
+ */
 export const handleLogin = async (req, res) => {
 
     const {email, password, confirmPassword} = req.body;
@@ -60,23 +66,28 @@ export const handleLogin = async (req, res) => {
 
 }
 
+/**
+ * @desc Logout de usuário
+ * @route POST /auth/logout
+ * @access PUBLIC
+ */
 export const handleLogout = async (req, res) => {
 
     const cookies = req.cookies;
     if (!cookies?.jwt) return res.sendStatus(208);
     const refreshToken = cookies.jwt;
-    try {
+    res.clearCookie('jwt', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'None'
+    });
 
+    try {
         const user = await User.findOne({refreshToken}).exec();
         if (!user) return res.status(404).sendStatus({message: 'Usuário não encontrado'});
+        
         user.refreshToken = '';
         await user.save();
-
-        res.clearCookie('jwt', {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'None'
-        });
 
         res.sendStatus(208);
 
