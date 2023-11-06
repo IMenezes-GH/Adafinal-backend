@@ -104,6 +104,39 @@
         }
       }
     },
+    "/users/all": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "min",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "max",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "405": {
+            "description": "Method Not Allowed"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/users/": {
       "get": {
         "description": "",

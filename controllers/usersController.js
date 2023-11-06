@@ -2,24 +2,57 @@ import mongoose from 'mongoose';
 import User from '../models/User.js';
 import bcrypt from 'bcrypt';
 import ValidationContract from '../validation/validationContract.js';
-import { json } from 'express';
 
 /**
- * 
- * @param {*} req 
- * @param {*} res 
- * @returns 
+ * GET vários Usuários aceitando como parâmetros nome (para busca aproximada), mínimo e máximo (para limitar número de documentos)
+ * @param {Request} req Objeto Request do Express
+ * @param {Response} res Objeto Response do Express
+ * @returns {Response} resposta do request realizado
+ */
+export const getUsers = async (req, res) => {
+
+    const min = req.query.min;
+    const max = req.query.max;
+    const name = req.query.name || '';
+
+    if (isNaN(min) || isNaN(max)) return res.status(405).json({message: 'min e máx precisam ser valores númericos.'});
+    if(max > 50) return res.status(405).json({message: "Limite de no máximo 50 usuários por pesquisa."});
+
+    try {
+        const users = await User.find({$or: [{name: {$regex: name}}]})
+        .skip(min)
+        .limit(max)
+        .select('-password -refreshToken')
+        .lean().exec();
+
+        res.json(users);
+
+    } catch (err){
+        res.status(500).json(err.message);
+    }
+}
+
+
+/**
+ * GET um único usuário utilizando id ou email do usuário, por parâmetro ou query.
+ * @param {Request} req Objeto Request do Express
+ * @param {Response} res Objeto Response do Express
+ * @returns {Response} resposta do request realizado
  */
 export const getUser = async (req, res) => {
 
-    const id = req.query.id || req.params.id;
+    const id = req.params.id || req.query.id;
     const email = req.query.email;
 
     if (!id && !email) return res.status(405).json({message: 'Campo id de usuário é obrigatório'});
     if (id && !mongoose.Types.ObjectId.isValid(id)) return res.status(405).json({message: "id de usuário inválido"})
 
     try {
-        const user = await User.findOne({$or: [{_id: id}, {email}]}).select('-password').lean().exec();
+
+        const user = await User.findOne(
+            { $or: [{_id: id}, {email}] })
+                .select('-password -refreshToken')
+                .lean().exec();
         if (!user) return res.status(404).json({message: 'Usuário não foi encontrado.'});
 
         res.json(user);
@@ -87,6 +120,14 @@ export const createUser = async (req, res) => {
         res.status(500).json(err.message);
     } 
 }
+
+
+/**
+ * Atualiza um usuário
+ * @param {Request} req Objeto Request do Express
+ * @param {Response} res Objeto Response do Express
+ * @returns {Response} resposta do request realizado
+ */
 export const updateUser = async (req, res) => {
 
     const {id, name, email, password, birthDate, country, state} = req.body;
@@ -144,7 +185,7 @@ export const deleteUser = async (req, res) => {
         if (!user) return res.sendStatus(404);
 
         const deletedUser = await user.deleteOne();
-        return res.json({message: `usuário ${deletedUser.name} deletado`})
+        return res.json({message: `usuário ${deletedUser.email} deletado`})
 
     } catch (err) {
         res.status(500).json(err.message);
