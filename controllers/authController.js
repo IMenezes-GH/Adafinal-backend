@@ -28,7 +28,7 @@ export const handleLogin = async (req, res) => {
         },
         process.env.ACCESS_TOKEN_SECRET,
         {
-            expiresIn: '10s',
+            expiresIn: '15m',
         }
         )
 
@@ -37,7 +37,7 @@ export const handleLogin = async (req, res) => {
         },
         process.env.REFRESH_TOKEN_SECRET,
         {
-            expiresIn: '30s'
+            expiresIn: '7d'
         })
     
         user.refreshToken = refreshToken;
@@ -49,10 +49,10 @@ export const handleLogin = async (req, res) => {
             httpOnly: true,
             // secure: true, // Habilitar em PROD
             sameSite: 'None',
-            maxAge: 1000 * 30 }
+            maxAge: 1000 * 60 * 60 * 24 * 7 }
         )
 
-        res.json({token: accessToken});
+        res.json({token: accessToken, user: user._id});
 
     } catch (err){
         res.status(500).json({message: err.message});

@@ -17,7 +17,7 @@ export const getUserById = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(405).json({message: "id de usuário inválido"})
 
     try {
-        const user = await User.findById(id).exec();
+        const user = await User.findById(id).select('-password').lean().exec();
         if (!user) return res.status(404).json({message: 'Usuário não foi encontrado.'});
 
         res.json(user);
