@@ -6,6 +6,7 @@ const schema = Schema({
         type: Schema.Types.String,
         required: [true, 'O nome é obrigatório. '],
         trim: true,
+        unique: true
     },
 
     category: {
@@ -22,7 +23,8 @@ const schema = Schema({
     url:{
         type: Schema.Types.String,
         required: true,
-        trim: true
+        trim: true,
+        unique: true
     },
 
     imageURL: {

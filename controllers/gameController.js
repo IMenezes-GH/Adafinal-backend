@@ -52,7 +52,7 @@ export const createGame = async (req, res) => {
         const contract = new ValidationContract();
         
         //Validações de nome
-        contract.hasMinLen(name, 3, 'O nome deve conter pelo menos 3 caracteres. ');
+        contract.hasMinLen(name, 1, 'O nome deve conter pelo menos 1 caracteres. ');
         contract.hasMaxLen(name, 255, 'O nome deve conter no máximo 255 caracteres. ');
         
         //Validações de descrição
@@ -64,6 +64,9 @@ export const createGame = async (req, res) => {
             res.status(405).send(contract.errors()).end();
             return;
         }
+
+        const duplicate = await Game.findOne({$or: [{url}, {name}]}).lean().exec();
+        if (duplicate) return res.sendStatus(409);
 
         const newGame = {
             name,

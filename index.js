@@ -35,12 +35,13 @@ app.use('/auth', cookieParser());
 
 
 app.use('/', root);
-app.use('/category', categoryRoute);
-app.use('/games', gameRoute);
 app.use('/ratings', ratingRoute);
 app.use('/users', userRoute);
 app.use('/auth', authRoute);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(loadSwaggerFile()));
+
+app.use('/games', gameRoute);
+app.use('/category', categoryRoute);
 
 // 404
 app.use('*', (req, res) => {
