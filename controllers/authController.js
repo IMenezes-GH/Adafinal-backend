@@ -2,6 +2,11 @@ import User from "../models/User.js";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import chalk from 'chalk';
+import {stringToBool} from '../util/parseUtil.js';
+
+
+const SECURE_COOKIES = stringToBool(process.env.SECURE_COOKIES) ?? true; // Ambiente de desenvolvimento false, Prod TRUE
+console.log(chalk.bold.yellowBright(`SECURE_COOKIES IS SET TO: ${SECURE_COOKIES}`))
 
 /**
  * @desc Login de usuário
@@ -58,7 +63,7 @@ export const handleLogin = async (req, res) => {
             refreshToken,
             {
             httpOnly: true,
-            // secure: true, // Habilitar em PROD
+            secure: SECURE_COOKIES, // Habilitar em PROD
             sameSite: 'None',
             maxAge: 1000 * 60 * 60 * 24 * 3 } // 3 dias
         )
@@ -84,7 +89,7 @@ export const handleLogout = async (req, res) => {
     const refreshToken = cookies.jwt;
     res.clearCookie('jwt', {
         httpOnly: true,
-        // secure: true,
+        secure: SECURE_COOKIES, // Habilitar em PROD
         sameSite: 'None'
     });
 
@@ -168,7 +173,7 @@ export const handleRefresh = async (req, res) => {
                 res.cookie('jwt', newRefreshToken,
                   {
                     httpOnly: true,
-                    // secure: true, 
+                    secure: SECURE_COOKIES, // Habilitar em PROD
                     sameSite: 'None', 
                     maxAge: 1000 * 60 * 60 * 25 * 3}
                 )

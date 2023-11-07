@@ -26,7 +26,7 @@ export const getAllGames = async (req, res) => {
 export const getGamesByName = async (req, res) => {
     // #swagger.tags = ['Games']
     const name = req.query.name;
-    if (!name) return res.status(400).sendStatus({message: 'name é obrigatório'});
+    if (!name) return res.redirect('/games/all');
 
     try {
         const games = await Game.find({name: {$regex: name}}).lean().exec();
@@ -48,8 +48,7 @@ export const getGameById = async (req, res) => {
 
     const id = req.params.id;
 
-    if (!id) return res.status(400).json({message: 'Campo id é obrigatório'});
-    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(400).json({message: "id inválido"})
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(400).json({message: "id de jogo inválido"})
 
     try {
         const game = await Game.findById(id).exec();

@@ -5,20 +5,23 @@
     "description": "API Backend do Best Browser Games",
     "version": "1.0.0"
   },
-  "host": "https://adafinal-backend-cgd5vzou6-imenezes-gh.vercel.app",
+  "host": "localhost:3000",
   "basePath": "/",
   "tags": [
     {
-      "name": "Games"
+      "name": "Users"
     },
     {
-      "name": "Users"
+      "name": "Auth"
     },
     {
       "name": "Ratings"
     },
     {
-      "name": "Auth"
+      "name": "Games"
+    },
+    {
+      "name": "Category"
     }
   ],
   "schemes": [
@@ -510,9 +513,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
           },
           "500": {
             "description": "Internal Server Error"
