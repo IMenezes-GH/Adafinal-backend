@@ -27,8 +27,13 @@ import authRoute from './routes/AuthRoute.js';
 
 import mongoose from 'mongoose';
 
-
+const allowCredentials = (req, res, next) => {
+    res.header('Access-Control-Allow-Credentials', true);
+    next();
+}
 const app = Express();
+
+app.use(allowCredentials);
 app.use(cors({credentials: true}));
 app.use(Express.urlencoded({extended: false}));
 app.use(Express.json());
