@@ -23,7 +23,6 @@ const doc = {
     },
     tags: [{name: 'Users'}, {name: 'Auth'}, {name: 'Ratings'}, {name: 'Games'}, {name: 'Category'}],
     schemes: ['https', 'http'],
-    host: process.env.DEPLOYMENT_URL,
     components: {
         securitySchemes:{
             bearerAuth: {

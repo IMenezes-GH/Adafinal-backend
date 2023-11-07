@@ -11,7 +11,7 @@ import connectDB from './config/MongoConnect.js';
 
 
 import {generateSwaggerFile, loadSwaggerFile} from './swagger.js';
-generateSwaggerFile();
+// generateSwaggerFile();
 
 const PORT = process.env.PORT || 3000;
 
