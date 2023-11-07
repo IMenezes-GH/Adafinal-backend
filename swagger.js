@@ -2,6 +2,7 @@ import swaggerAutogen from 'swagger-autogen'
 import chalk from 'chalk'
 import path from 'path';
 import fs from 'fs';
+import { stringToBool } from './util/parseUtil.js';
 
 const __dirname = new URL('.', import.meta.url).pathname;
 
@@ -34,6 +35,7 @@ const doc = {
   };
 
 const generateSwaggerFile = () => {
+    if (!stringToBool(process.env.SWAGGER_REGEN ?? 'false')) return console.log(chalk.gray('Swagger re-gen ignored.'));
     const outputFile = './swagger_output.json';
     const input = ['./index.js'];
     

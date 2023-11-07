@@ -11,7 +11,7 @@ import connectDB from './config/MongoConnect.js';
 
 
 import {generateSwaggerFile, loadSwaggerFile} from './swagger.js';
-// generateSwaggerFile();
+generateSwaggerFile();
 
 const PORT = process.env.PORT || 3000;
 
@@ -31,6 +31,7 @@ import mongoose from 'mongoose';
 const app = Express();
 app.use(cors());
 app.use(Express.urlencoded({extended: false}));
+app.use(Express.json());
 app.use('/auth', cookieParser());
 
 
