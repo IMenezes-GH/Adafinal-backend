@@ -40,7 +40,7 @@ app.use('/users', userRoute);
 app.use('/auth', authRoute);
 
 const CUSTOM_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(loadSwaggerFile(), {customCss: CUSTOM_URL}));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(loadSwaggerFile(), {customCssUrl: CUSTOM_URL}));
 
 app.use('/games', gameRoute);
 app.use('/category', categoryRoute);
