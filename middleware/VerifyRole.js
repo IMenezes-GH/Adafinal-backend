@@ -6,7 +6,7 @@ const verifyRole = (...roles) => {
         const userRole = req.userData.roles;
 
         const allowedRoles = [...roles];
-        if (!allowedRoles.includes(userRole)) return res.sendStatus(401);
+        if (!allowedRoles.includes(userRole)) return res.sendStatus(403);
 
         next();
     }
