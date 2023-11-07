@@ -42,7 +42,7 @@ export const getUser = async (req, res) => {
     const id = req.params.id || req.query.id;
     const email = req.query.email;
 
-    if (!id && !email) return res.status(405).json({message: 'Campo id de usuário é obrigatório'});
+    if (!id && !email) return res.redirect('/users/all');
     if (id && !mongoose.Types.ObjectId.isValid(id)) return res.status(405).json({message: "id de usuário inválido"})
 
     try {
@@ -129,8 +129,8 @@ export const updateUser = async (req, res) => {
     /* #swagger.security = [{
             "bearerAuth": []
     }] */
-    const {name, email, password, birthDate, country, state} = req.body;
-    const id = req.body.id || req.params.id;
+    const {id, name, email, password, birthDate, country, state} = req.body;
+
     if (!name || !email || !password) return res.status(400).json({message: 'Nome, email e senha são campos obrigatórios.'});
 
     try {

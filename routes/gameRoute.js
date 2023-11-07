@@ -8,7 +8,6 @@ const router = Router();
 router.route('/').get(getGamesByName) // QUERY game
 
 router.route('/all').get(getAllGames) //Get all games
-
 router.route('/:id').get(getGameById) //Get a game by id
 
 router.use(JWTVerify);
@@ -17,5 +16,6 @@ router.route('/')
     .patch(verifyRole('admin', 'moderator'), updateGame)
     .delete(verifyRole('admin'), deleteGame)
 
+    
 
 export default router;
