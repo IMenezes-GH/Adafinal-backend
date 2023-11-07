@@ -38,4 +38,12 @@ export default class ValidationContract {
     isValid() {
         return errors.length == 0;
     }
+    isOlder(value, min, message){
+        console.log(value);
+        const data = value.split('-');
+        if (!value || new Date(Number(value[0])+min, Number(value[1])-1, Number(value[2])) <= new Date()){
+            errors.push({message: message})
+
+        };
+    }
 }

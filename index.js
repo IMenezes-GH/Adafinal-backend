@@ -47,7 +47,7 @@ app.use('/games', gameRoute);
 app.use('/category', categoryRoute);
 
 // 404
-app.use('*', (req, res) => {
+app.all('*', (req, res) => {
     res.status(404);
     res.json({message: "404 - not found"});
 })

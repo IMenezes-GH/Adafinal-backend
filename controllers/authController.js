@@ -95,7 +95,7 @@ export const handleLogout = async (req, res) => {
 
     try {
         const user = await User.findOne({refreshToken}).exec();
-        if (!user) return res.status(404).sendStatus({message: 'Usuário não encontrado'});
+        if (!user) return res.status(404).send({message: 'Usuário não encontrado'});
         
         user.refreshToken = '';
         await user.save();
