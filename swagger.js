@@ -22,10 +22,12 @@ const doc = {
       description: 'API Backend do Best Browser Games'
     },
     tags: [{name: 'Users'}, {name: 'Auth'}, {name: 'Ratings'}, {name: 'Games'}, {name: 'Category'}],
+    schemes: ['https', 'http'],
+    host: process.env.DEPLOYMENT_URL,
     components: {
         securitySchemes:{
             bearerAuth: {
-                type: 'http',
+                type: 'https',
                 scheme: 'bearer'
             }
         }
