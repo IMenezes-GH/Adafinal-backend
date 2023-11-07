@@ -38,6 +38,7 @@ app.use('/', root);
 app.use('/ratings', ratingRoute);
 app.use('/users', userRoute);
 app.use('/auth', authRoute);
+app.use(Express.static('/api-docs'))
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(loadSwaggerFile()));
 
 app.use('/games', gameRoute);
