@@ -54,3 +54,5 @@ mongoose.connection.once('open', () => {
         console.log(`Servidor aberto no port: ${chalk.green(PORT)}`)
     })
 })
+
+export default app
