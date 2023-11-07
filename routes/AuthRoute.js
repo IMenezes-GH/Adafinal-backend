@@ -3,8 +3,9 @@ import { handleLogin, handleLogout, handleRefresh } from "../controllers/authCon
 
 const router = Router();
 
-router.route('/login').post(handleLogin).all((req,res) => {res.sendStatus(405)});
+router.route('/login').post(handleLogin);
 router.route('/logout').post(handleLogout);
 router.route('/refresh').get(handleRefresh);
+router.route('/*').all((req,res) => {res.sendStatus(405)});
 
 export default router;
