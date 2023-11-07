@@ -9,6 +9,7 @@ import jwt from 'jsonwebtoken';
  * @access PUBLIC
  */
 export const handleLogin = async (req, res) => {
+    // #swagger.tags = ['Auth']
 
     const {email, password, confirmPassword} = req.body;
     if (!email || !password || !confirmPassword) return res.status(400).send({message: 'Email e senhão são campos obrigatórios.'});
@@ -72,6 +73,7 @@ export const handleLogin = async (req, res) => {
  * @access PUBLIC
  */
 export const handleLogout = async (req, res) => {
+    // #swagger.tags = ['Auth']
 
     const cookies = req.cookies;
     if (!cookies?.jwt) return res.sendStatus(208);

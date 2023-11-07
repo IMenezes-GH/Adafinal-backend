@@ -7,6 +7,7 @@ import { stringToBool } from "../util/parseUtil.js";
  * @access PUBLIC
  */
 export const getCategory = async(req, res) => {
+    // #swagger.tags = ['Category']
 
     const id = req.body.id;
     const name = req.query.name || req.params.id;
@@ -39,6 +40,10 @@ export const getCategory = async(req, res) => {
  * @access PRIVATE
  */
 export const createNewCategory = async(req, res) => {
+    // #swagger.tags = ['Category']
+     /* #swagger.security = [{
+            "bearerAuth": []
+    }] */
     const {name, active} = req.body;
     if (!name) return res.sendStatus(400);
 
@@ -65,6 +70,11 @@ export const createNewCategory = async(req, res) => {
  * @access PRIVATE
  */
 export const updateCategory = async (req, res) => {
+    // #swagger.tags = ['Category']
+    /* #swagger.security = [{
+            "bearerAuth": []
+    }] */
+
     const {id, name, newname, active} = req.body;
     if (!id && !name) return res.sendStatus(400); // Pelo menos um dos atributos é necessário
 

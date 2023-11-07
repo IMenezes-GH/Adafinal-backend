@@ -16,12 +16,29 @@ const loadSwaggerFile = () => {
     }
 }
 
+const doc = {
+    info: {
+      title: 'Best Browser Games API',
+      description: 'API Backend do Best Browser Games'
+    },
+    host: 'localhost:3000',
+    tags: [{name: 'Games'}, {name: 'Users'}, {name: 'Ratings'}, {name: 'Auth'}],
+    components: {
+        securitySchemes:{
+            bearerAuth: {
+                type: 'http',
+                scheme: 'bearer'
+            }
+        }
+    }
+  };
+
 const generateSwaggerFile = () => {
     const outputFile = './swagger_output.json';
     const input = ['./index.js'];
     
     console.log(chalk.blue('Swagger re-gen requested.'));
-    swaggerAutogen(outputFile, input)
+    swaggerAutogen(outputFile, input, doc)
 }
 
 

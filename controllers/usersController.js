@@ -9,7 +9,7 @@ import ValidationContract from '../validation/validationContract.js';
  * @access PUBLIC
  */
 export const getUsers = async (req, res) => {
-
+    // #swagger.tags = ['Users']
     const min = req.query.min;
     const max = req.query.max;
     const name = req.query.name || '';
@@ -38,7 +38,7 @@ export const getUsers = async (req, res) => {
  * @access PUBLIC
  */
 export const getUser = async (req, res) => {
-
+    // #swagger.tags = ['Users']
     const id = req.params.id || req.query.id;
     const email = req.query.email;
 
@@ -66,7 +66,7 @@ export const getUser = async (req, res) => {
  * @access PUBLIC
  */
 export const createUser = async (req, res) => {
-    
+    // #swagger.tags = ['Users']
     const {name, email, password, confirmPassword, birthDate, country, state, roles, active} = req.body;
     if (!name || !email || !password) return res.status(400).json({message: 'Nome, email e senha são campos obrigatórios.'});
 
@@ -125,7 +125,10 @@ export const createUser = async (req, res) => {
  * @access PRIVATE
  */
 export const updateUser = async (req, res) => {
-
+    // #swagger.tags = ['Users']
+    /* #swagger.security = [{
+            "bearerAuth": []
+    }] */
     const {id, name, email, password, birthDate, country, state} = req.body;
     if (!name || !email || !password) return res.status(400).json({message: 'Nome, email e senha são campos obrigatórios.'});
 
@@ -178,7 +181,10 @@ export const updateUser = async (req, res) => {
  * @access PRIVATE
  */
 export const deleteUser = async (req, res) => {
-    
+    // #swagger.tags = ['Users']
+    /* #swagger.security = [{
+        "bearerAuth": []
+    }] */
     const {id} = req.body;
     if (!id) return res.status(400).json({message: 'Id é obrigatório'});
 

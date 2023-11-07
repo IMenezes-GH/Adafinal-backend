@@ -8,6 +8,7 @@ import ValidationContract from '../validation/validationContract.js';
  * @access PUBLIC
  */
 export const getAllGames = async (req, res) => {
+    // #swagger.tags = ['Games']
     try {
         const games = await Game.find().lean().exec();
         res.json(games);
@@ -23,6 +24,7 @@ export const getAllGames = async (req, res) => {
  * @access PUBLIC
  */
 export const getGamesByName = async (req, res) => {
+    // #swagger.tags = ['Games']
     const name = req.query.name;
     if (!name) return res.status(400).sendStatus({message: 'name é obrigatório'});
 
@@ -42,6 +44,7 @@ export const getGamesByName = async (req, res) => {
  * @access PUBLIC
  */
 export const getGameById = async (req, res) => {
+    // #swagger.tags = ['Games']
 
     const id = req.params.id;
 
@@ -65,7 +68,10 @@ export const getGameById = async (req, res) => {
  * @access PRIVATE
  */
 export const createGame = async (req, res) => {
-    
+    // #swagger.tags = ['Games']
+    /* #swagger.security = [{
+            "bearerAuth": []
+    }] */
     const {name, description, category, url, imageURL, videoURL} = req.body;
     if (!name || !description || !url || !imageURL) return res.status(400).json({message: 'Nome, description, url, imageURL obrigatórios'});
 
@@ -112,7 +118,10 @@ export const createGame = async (req, res) => {
  * @access PRIVATE
  */
 export const updateGame = async (req, res) => {
-
+    // #swagger.tags = ['Games']
+    /* #swagger.security = [{
+            "bearerAuth": []
+    }] */
     const {id, name, description, category, url, imageURL, videoURL, active, score, ratings} = req.body;
     if (!id) return res.status(400).json({message: 'Id obrigatórios'});
 
@@ -163,7 +172,10 @@ export const updateGame = async (req, res) => {
  * @access PRIVATE
  */
 export const deleteGame = async (req, res) => {
-    
+    // #swagger.tags = ['Games']
+    /* #swagger.security = [{
+            "bearerAuth": []
+    }] */
     const {id} = req.body;
     if (!id) return res.status(400).json({message: 'Id é obrigatório'});
 

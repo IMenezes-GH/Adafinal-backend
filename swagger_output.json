@@ -1,12 +1,26 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "1.0.0",
-    "title": "REST API",
-    "description": ""
+    "title": "Best Browser Games API",
+    "description": "API Backend do Best Browser Games",
+    "version": "1.0.0"
   },
   "host": "localhost:3000",
   "basePath": "/",
+  "tags": [
+    {
+      "name": "Games"
+    },
+    {
+      "name": "Users"
+    },
+    {
+      "name": "Ratings"
+    },
+    {
+      "name": "Auth"
+    }
+  ],
   "schemes": [
     "http"
   ],
@@ -23,6 +37,9 @@
     },
     "/ratings/": {
       "get": {
+        "tags": [
+          "Ratings"
+        ],
         "description": "",
         "parameters": [
           {
@@ -64,6 +81,9 @@
         }
       },
       "post": {
+        "tags": [
+          "Ratings"
+        ],
         "description": "",
         "parameters": [
           {
@@ -95,27 +115,19 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
-      },
-      "delete": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
+        },
+        "security": [
+          {
+            "bearerAuth": []
           }
-        }
-      },
-      "patch": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
+        ]
       }
     },
     "/users/all": {
       "get": {
+        "tags": [
+          "Users"
+        ],
         "description": "",
         "parameters": [
           {
@@ -149,6 +161,9 @@
     },
     "/users/": {
       "get": {
+        "tags": [
+          "Users"
+        ],
         "description": "",
         "parameters": [
           {
@@ -178,6 +193,9 @@
         }
       },
       "post": {
+        "tags": [
+          "Users"
+        ],
         "description": "",
         "parameters": [
           {
@@ -238,6 +256,9 @@
     },
     "/users/{id}": {
       "get": {
+        "tags": [
+          "Users"
+        ],
         "description": "",
         "parameters": [
           {
@@ -273,6 +294,9 @@
         }
       },
       "delete": {
+        "tags": [
+          "Users"
+        ],
         "description": "",
         "parameters": [
           {
@@ -307,9 +331,17 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       },
       "patch": {
+        "tags": [
+          "Users"
+        ],
         "description": "",
         "parameters": [
           {
@@ -362,11 +394,19 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/auth/login": {
       "post": {
+        "tags": [
+          "Auth"
+        ],
         "description": "",
         "parameters": [
           {
@@ -409,6 +449,9 @@
     },
     "/auth/logout": {
       "post": {
+        "tags": [
+          "Auth"
+        ],
         "description": "",
         "responses": {
           "208": {
@@ -435,6 +478,9 @@
     },
     "/games/": {
       "get": {
+        "tags": [
+          "Games"
+        ],
         "description": "",
         "parameters": [
           {
@@ -456,6 +502,9 @@
         }
       },
       "post": {
+        "tags": [
+          "Games"
+        ],
         "description": "",
         "parameters": [
           {
@@ -502,9 +551,17 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       },
       "delete": {
+        "tags": [
+          "Games"
+        ],
         "description": "",
         "parameters": [
           {
@@ -533,9 +590,17 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       },
       "patch": {
+        "tags": [
+          "Games"
+        ],
         "description": "",
         "parameters": [
           {
@@ -591,11 +656,19 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/games/all": {
       "get": {
+        "tags": [
+          "Games"
+        ],
         "description": "",
         "responses": {
           "200": {
@@ -609,6 +682,9 @@
     },
     "/games/{id}": {
       "get": {
+        "tags": [
+          "Games"
+        ],
         "description": "",
         "parameters": [
           {
@@ -636,6 +712,9 @@
     },
     "/category/": {
       "get": {
+        "tags": [
+          "Category"
+        ],
         "description": "",
         "parameters": [
           {
@@ -654,6 +733,9 @@
         }
       },
       "post": {
+        "tags": [
+          "Category"
+        ],
         "description": "",
         "parameters": [
           {
@@ -685,9 +767,17 @@
           "409": {
             "description": "Conflict"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       },
       "patch": {
+        "tags": [
+          "Category"
+        ],
         "description": "",
         "parameters": [
           {
@@ -725,11 +815,19 @@
           "409": {
             "description": "Conflict"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/category/{id}": {
       "get": {
+        "tags": [
+          "Category"
+        ],
         "description": "",
         "parameters": [
           {
@@ -752,6 +850,14 @@
             "description": "Not Found"
           }
         }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
       }
     }
   }

@@ -8,7 +8,7 @@ import { isValidObjectId } from "mongoose";
  * @access PUBLIC
  */
 export const getRating = async (req, res) => {
-
+    // #swagger.tags = ['Ratings']
     const {id, game, user, min, max} = req.query;
 
     try {
@@ -37,7 +37,10 @@ export const getRating = async (req, res) => {
  * @access PRIVATE
  */
 export const createRating = async(req, res) => {
-
+    // #swagger.tags = ['Ratings']
+    /* #swagger.security = [{
+            "bearerAuth": []
+    }] */
     const {score, description, game, user} = req.body;
     try {
         const data= {
