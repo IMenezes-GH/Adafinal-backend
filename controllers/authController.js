@@ -51,6 +51,7 @@ export const handleLogin = async (req, res) => {
     
         user.refreshToken = refreshToken;
         user.lastLogin = lastLogin;
+        user.active = true;
         await user.save();
 
         res.cookie('jwt',
@@ -103,24 +104,30 @@ export const handleLogout = async (req, res) => {
 
 export const handleRefresh = async (req, res) => {
     // #swagger.tags = ['Auth']
+
     const cookies = req.cookies;
+
     if (!cookies?.jwt) return res.status(401).json({message: "Refresh JWT foi não encontrado."});
-    console.log(cookies);
     const refreshJWT = cookies.jwt;
+
     jwt.verify(
             refreshJWT,
             process.env.REFRESH_TOKEN_SECRET,
             async (err, decoded) => {
                 if (err) return res.status(403).json({message: "Forbidden"});
                 
-                const id = decoded.id;
+                const id = decoded.id; // ID do usuário encontrado no cookie
                 const foundUser = await User.findById(id).exec();
                 if (!foundUser) return res.sendStatus(404);
                 if (foundUser && refreshJWT !== foundUser.refreshToken){
+                    // Acionado caso usuário tente utilizar um refreshToken com dados válidos, mas não atual.
+                    // Por razões de segurança, o token ligado ao banco de dados é limpado,
+                    // e o estado de atividade da conta é forçada para false, impossibilitando que o usuário logado faça alterações na conta.
+                    // Isso força o usuário à refazer o login para gerar um novo token e resetar o atributo ativo da conta para true.
 
-                    console.log(chalk.red(`Tentativa de reutilização de token antigo detectada para o usuário ${chalk.bgBlack.whiteBright.bold(foundUser._id)}. Todos os Tokens para esse usuário foram invalidados.`))
+                    console.log(chalk.red(`Tentativa de reutilização de token antigo detectada para o usuário ${chalk.bgBlack.whiteBright.bold(foundUser._id)}. Token refresh foi revogado.`))
                     foundUser.refreshToken = '';
-                    foundUser.lastLogin = null;
+                    foundUser.active = false;
                     await foundUser.save();
                     return res.sendStatus(403);
                 }
@@ -168,9 +175,6 @@ export const handleRefresh = async (req, res) => {
             
                 res.json({token: newAccessToken, user: foundUser._id});
             
-            }
-            
-            
+            }    
     )
-
 }

@@ -53,9 +53,6 @@ const userSchema = Schema({
     refreshToken: {
         type: Schema.Types.String
 
-    },
-    lastLogin: {
-        type: Schema.Types.Date
     }
 });
 

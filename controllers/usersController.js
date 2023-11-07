@@ -10,8 +10,8 @@ import ValidationContract from '../validation/validationContract.js';
  */
 export const getUsers = async (req, res) => {
     // #swagger.tags = ['Users']
-    const min = req.query.min;
-    const max = req.query.max;
+    const min = req.query.min || 0;
+    const max = req.query.max || 50;
     const name = req.query.name || '';
 
     if (isNaN(min) || isNaN(max)) return res.status(405).json({message: 'min e máx precisam ser valores númericos.'});
@@ -129,11 +129,13 @@ export const updateUser = async (req, res) => {
     /* #swagger.security = [{
             "bearerAuth": []
     }] */
-    const {id, name, email, password, birthDate, country, state} = req.body;
+    const {name, email, password, birthDate, country, state} = req.body;
+    const id = req.body.id || req.params.id;
     if (!name || !email || !password) return res.status(400).json({message: 'Nome, email e senha são campos obrigatórios.'});
 
     try {
         const user = await User.findById(id).exec();
+        if (!user.active) return res.sendStatus(403);
 
         const contract = new ValidationContract();
         
@@ -147,6 +149,7 @@ export const updateUser = async (req, res) => {
         contract.hasMaxLen(email, 128, 'O e-mail deve conter no máximo 128 caracteres. ');
 
         const duplicate = await User.findOne({email}).select('-password').lean().exec();
+        console.log(duplicate._id.toString(), id)
         if (duplicate && duplicate._id.toString() !== id) return res.sendStatus(409); // Conflito
         
         //Validações de senha
@@ -190,6 +193,7 @@ export const deleteUser = async (req, res) => {
 
     try {
         const user = await User.findById(id).exec();
+        if (!user.active) return res.sendStatus(403);
         if (!user) return res.sendStatus(404);
 
         const deletedUser = await user.deleteOne();
