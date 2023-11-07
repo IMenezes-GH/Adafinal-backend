@@ -38,8 +38,9 @@ app.use('/', root);
 app.use('/ratings', ratingRoute);
 app.use('/users', userRoute);
 app.use('/auth', authRoute);
-app.use(Express.static('/api-docs'))
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(loadSwaggerFile()));
+
+const CUSTOM_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(loadSwaggerFile(), {customCss: CUSTOM_URL}));
 
 app.use('/games', gameRoute);
 app.use('/category', categoryRoute);
