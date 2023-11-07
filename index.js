@@ -34,7 +34,12 @@ const allowCredentials = (req, res, next) => {
 const app = Express();
 
 app.use(allowCredentials);
-app.use(cors({credentials: true}));
+app.use(cors(
+    {
+        credentials: true,
+        allowedHeaders: ['Content-Type', 'Authorization'],
+        origin: '*', }
+        ));
 app.use(Express.urlencoded({extended: false}));
 app.use(Express.json());
 app.use('/auth', cookieParser());
