@@ -29,7 +29,7 @@ import mongoose from 'mongoose';
 
 
 const app = Express();
-app.use(cors());
+app.use(cors({credentials: true}));
 app.use(Express.urlencoded({extended: false}));
 app.use(Express.json());
 app.use('/auth', cookieParser());
