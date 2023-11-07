@@ -29,12 +29,7 @@ import mongoose from 'mongoose';
 
 const app = Express();
 
-app.use(cors(
-    {
-        credentials: true,
-        allowedHeaders: ['Content-Type', 'Authorization'],
-        origin: '*', }
-        ));
+app.use(cors());
 app.use(Express.urlencoded({extended: false}));
 app.use(Express.json());
 app.use('/auth', cookieParser());
