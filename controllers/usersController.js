@@ -90,7 +90,7 @@ export const createUser = async (req, res) => {
         contract.isRequired(password, 'A senha é obrigatória. ');
         contract.hasMinLen(password, 6, 'A senha deve conter pelo menos 6 caracteres. ');
         contract.isNotEquals(password, confirmPassword, 'A confirmação de senha não confere. ');
-        const hashPwd = await bcrypt.hash(password, Number(process.env.SALT_KEY));
+        const hashPwd = await bcrypt.hash(password, 10);
         console.count('CreateUser')
         contract.isRequired(req.body.birthDate, 'A data de nascimento é obrigatória. ');
         console.count('CreateUser')
