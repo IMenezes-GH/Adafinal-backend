@@ -72,12 +72,12 @@ export const createUser = async (req, res) => {
 
     try {
         const contract = new ValidationContract();
-        
+        console.count('CreateUser')
         //Validações de nome
         contract.isRequired(name, 'O nome é obrigatório. ');
         contract.hasMinLen(name, 3, 'O nome deve conter pelo menos 3 caracteres. ');
         contract.hasMaxLen(name, 255, 'O nome deve conter no máximo 255 caracteres. ');
-        
+        console.count('CreateUser')
         //Validações de e-mail
         contract.isEmail(email, 'E-mail inválido. ');
         contract.isRequired(email, 'O e-mail é obrigatório. ');
@@ -85,20 +85,20 @@ export const createUser = async (req, res) => {
         contract.hasMaxLen(email, 128, 'O e-mail deve conter no máximo 128 caracteres. ');
         const duplicate = await User.findOne({email}).select('email').lean().exec();
         if (duplicate) return res.sendStatus(409); // Conflito
-        
+        console.count('CreateUser')
         //Validações de senha
         contract.isRequired(password, 'A senha é obrigatória. ');
         contract.hasMinLen(password, 6, 'A senha deve conter pelo menos 6 caracteres. ');
         contract.isNotEquals(password, confirmPassword, 'A confirmação de senha não confere. ');
         const hashPwd = await bcrypt.hash(password, Number(process.env.SALT_KEY));
-
+        console.count('CreateUser')
         contract.isRequired(req.body.birthDate, 'A data de nascimento é obrigatória. ');
-
+        console.count('CreateUser')
         if(!contract.isValid()){
             res.status(405).send(contract.errors()).end();
             return;
         }
-
+        console.count('CreateUser')
         const newUser = {
             name,
             email,
@@ -109,7 +109,7 @@ export const createUser = async (req, res) => {
             roles,
             active
         }
-
+        console.count('CreateUser')
         const createdUser = await User.create(newUser);
         res.status(201).json({message: `Usuário: ${createdUser._id} criado.`});
 
