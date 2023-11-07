@@ -5,7 +5,7 @@ import chalk from 'chalk';
 import {stringToBool} from '../util/parseUtil.js';
 
 
-const SECURE_COOKIES = stringToBool(process.env.SECURE_COOKIES) ?? true; // Ambiente de desenvolvimento false, Prod TRUE
+const SECURE_COOKIES = stringToBool(process.env.SECURE_COOKIES ?? 'true'); // Ambiente de desenvolvimento false, Prod TRUE
 console.log(chalk.bold.yellowBright(`SECURE_COOKIES IS SET TO: ${SECURE_COOKIES}`))
 
 /**
