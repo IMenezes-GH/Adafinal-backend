@@ -21,7 +21,7 @@ const doc = {
       title: 'Best Browser Games API',
       description: 'API Backend do Best Browser Games'
     },
-    host: 'localhost:3000',
+    host: 'https://adafinal-backend-cgd5vzou6-imenezes-gh.vercel.app',
     tags: [{name: 'Games'}, {name: 'Users'}, {name: 'Ratings'}, {name: 'Auth'}],
     components: {
         securitySchemes:{

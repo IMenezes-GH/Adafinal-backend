@@ -5,7 +5,7 @@
     "description": "API Backend do Best Browser Games",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
+  "host": "https://adafinal-backend-cgd5vzou6-imenezes-gh.vercel.app",
   "basePath": "/",
   "tags": [
     {
