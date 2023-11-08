@@ -5,5 +5,37 @@
 ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
 ![Swagger](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)
+![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)
 
 Backend para resolução do projeto final do módulo de React do programa <Primeiro código> da ADA, utilizando um servidor express, deploy na Vercel e conexão com um cluster no MongoDB Atlas.  
+
+### Instruções:
+
+1 - Clone/Crie um fork desse repositório  
+2 - Entre na sua conta Vercel, e clique em importar novo projeto
+<img src="./docs/Screenshot_20231108_200755.png">  
+3 - Selecione o repositório onde vocês clonou/criou o fork desse  repositório.  
+<img src="./docs/Screenshot_20231108_200931.png">
+4 - Durante a configuração do deploy, passe as seguintes variáveis de desenvolvimento:  
+
+    MONGODB_URI=(sua URI do mongoDB atlas)  
+    ACCESS_TOKEN_SECRET=(sua chave, veja abaixo como gerar) 
+    REFRESH_TOKEN_SECRET=(outra chave, diferente da chave anterior)   
+    SALT_KEY=10  
+    SECURE_COOKIES=true  
+
+5 - Após realizar o deploy do projeto, vá na aba "integrations" da vercel e procure por "mongo"
+6 - Permita a integração com o mongo e habilite para o seu projeto. 
+
+### Gerando uma chave:
+
+requisitos: Node.js
+
+1 - abra o seu terminal (cmd)
+2 - digite "node" e aperte enter
+3 - No ambiente node, execute o seguinte comando:
+```javascript
+require('crypto').randomBytes(64).toString('hex')
+```
+4 - Copie e cole a chave gerada na variável de ambiente.
+5 - Execute o comando novamente para gerar a chave do REFRESH_TOKEN_SECRET. É importante que ambas chaves sejam diferentes.
