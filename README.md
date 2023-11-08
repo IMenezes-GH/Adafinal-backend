@@ -34,7 +34,7 @@ Instruções para realizar o deploy do projeto self-hosted pela vercel.
 
 <img src="./docs/Screenshot_20231108_204206.png">
 
-### 6 - Adcione a integração MongoDB Atlas na sua conta e habilite ela no seu projeto. 
+### 6 - Adicione a integração MongoDB Atlas na sua conta Vercel e habilite ela no seu projeto. Talvez seja necessário habilitar a integração na sua conta MongoDB Atlas também.
 ### 7 - Pronto! Agora Teste as rotas do seu deploy para ver se está tudo certo.
 
 ## Gerando uma chave para o JWT:
