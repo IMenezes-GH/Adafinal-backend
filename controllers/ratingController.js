@@ -65,6 +65,9 @@ export const createRating = async(req, res) => {
  */
 export const updateRating = async (req, res) => {
     // #swagger.tags = ['Ratings']
+    /* #swagger.security = [{
+            "bearerAuth": []
+    }] */
     const {id, description, score} = req.body;
 
     try {
