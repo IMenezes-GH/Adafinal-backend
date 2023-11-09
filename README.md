@@ -12,15 +12,15 @@ Backend para resolução do projeto final do módulo de React do programa <Prime
 ## Instruções:
 Instruções para realizar o deploy do projeto self-hosted pela vercel.
 
-### 1 - Clone/Crie um fork desse repositório no github/gitlab/gitbucket  
-### 2 - Entre na sua conta Vercel, e clique em criar novo projeto
+#### 1 - Clone/Crie um fork desse repositório no github/gitlab/gitbucket  
+#### 2 - Entre na sua conta Vercel, e clique em criar novo projeto
 <img src="./docs/Screenshot_20231108_200755.png">  
 
-### 3 - Selecione o repositório onde vocês clonou/criou o fork desse  repositório. 
+#### 3 - Selecione o repositório onde você clonou/fork desse repositório. 
 
 <img src="./docs/Screenshot_20231108_200931.png">
 
-### 4 - Durante a configuração do deploy, passe as seguintes variáveis de desenvolvimento:
+#### 4 - Durante a configuração do deploy, passe as seguintes variáveis de desenvolvimento:
 
     MONGODB_URI=(sua URI do mongoDB atlas)  
     ACCESS_TOKEN_SECRET=(sua chave, veja abaixo como gerar) 
@@ -30,12 +30,12 @@ Instruções para realizar o deploy do projeto self-hosted pela vercel.
 
 <img src="./docs/Screenshot_20231108_201113.png" />
 
-### 5 - Após realizar o deploy do projeto, vá na aba "integrations" da vercel e procure por "mongo"
+#### 5 - Após realizar o deploy do projeto, vá na aba "integrations" da vercel e procure por "mongo"
 
 <img src="./docs/Screenshot_20231108_204206.png">
 
-### 6 - Adicione a integração MongoDB Atlas na sua conta Vercel e habilite ela no seu projeto. Talvez seja necessário habilitar a integração na sua conta MongoDB Atlas também.
-### 7 - Pronto! Agora Teste as rotas do seu deploy para ver se está tudo certo.
+#### 6 - Adicione a integração MongoDB Atlas na sua conta Vercel e habilite ela no seu projeto. Talvez seja necessário habilitar a integração na sua conta MongoDB Atlas também.
+#### 7 - Pronto! Agora Teste as rotas do seu deploy para ver se está tudo certo.
 
 ## Gerando uma chave para o JWT:
 
