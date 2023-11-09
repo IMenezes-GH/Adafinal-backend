@@ -4,7 +4,7 @@ import { isValidObjectId } from "mongoose";
 
 /**
  * @desc Pesquisa avaliações por jogo
- * @route GET /games?id=param1&game=param2&user=param3&min=param4&max=param5
+ * @route GET /ratings?id=param1&game=param2&user=param3&min=param4&max=param5
  * @access PUBLIC
  */
 export const getRating = async (req, res) => {
@@ -33,7 +33,7 @@ export const getRating = async (req, res) => {
 
 /**
  * @desc Cadastra uma avaliação
- * @route POST /rating
+ * @route POST /ratings
  * @access PRIVATE
  */
 export const createRating = async(req, res) => {
@@ -52,6 +52,34 @@ export const createRating = async(req, res) => {
 
         const newRating = await Rating.create(data);
         res.json(newRating);
+
+    } catch (err){
+        res.status(500).json(err.message);
+    }
+}
+
+/**
+ * @desc Atualiza avaliação
+ * @route PATCH /ratings
+ * @access PRIVATE
+ */
+export const updateRating = async (req, res) => {
+    // #swagger.tags = ['Ratings']
+    const {id, description, score} = req.body;
+
+    try {
+
+        if (!id || !isValidObjectId(id)) return res.status(400).json({message: "Id de avaliação está faltando ou inválido."});
+
+        const rating = await Rating.findById(id).exec();
+        if (!rating) return res.status(404).json({message: "Avaliação não existe."});
+
+        rating.description = description ?? rating.description;
+        rating.score = score ?? rating.score;
+
+        await rating.save();
+
+        res.json(rating);
 
     } catch (err){
         res.status(500).json(err.message);
