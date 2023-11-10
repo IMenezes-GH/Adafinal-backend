@@ -8,6 +8,12 @@ const userSchema = Schema({
         trim: true,
     },
 
+    username: {
+        type: Schema.Types.String,
+        required: [true, 'O nome de usuário é obrigatório. '],
+        trim: true,
+    },
+
     email: {
         type: Schema.Types.String,
         required: [true, 'O e-mail é obrigatório. '],

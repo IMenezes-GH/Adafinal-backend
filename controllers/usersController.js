@@ -1,7 +1,9 @@
-import mongoose from 'mongoose';
+import mongoose, { isValidObjectId } from 'mongoose';
 import User from '../models/User.js';
 import bcrypt from 'bcrypt';
 import ValidationContract from '../validation/validationContract.js';
+import Rating from '../models/Rating.js';
+import Game from '../models/Game.js';
 
 /**
  * @desc Recupera uma lista de usuários
@@ -12,13 +14,14 @@ export const getUsers = async (req, res) => {
     // #swagger.tags = ['Users']
     const min = req.query.min || 0;
     const max = req.query.max || 50;
-    const name = req.query.name || '';
+    const name = req.query.name || '   ';
+    const username = req.query.username || '   ';
 
     if (isNaN(min) || isNaN(max)) return res.status(405).json({message: 'min e máx precisam ser valores númericos.'});
     if(max > 50) return res.status(405).json({message: "Limite de no máximo 50 usuários por pesquisa."});
 
     try {
-        const users = await User.find({$or: [{name: {$regex: name}}]})
+        const users = await User.find({$or: [{username: username}, {name: {$regex: name}}]})
         .skip(min)
         .limit(max)
         .select('-password -refreshToken')
@@ -39,16 +42,14 @@ export const getUsers = async (req, res) => {
  */
 export const getUser = async (req, res) => {
     // #swagger.tags = ['Users']
-    const id = req.params.id || req.query.id;
+    const username = req.params.username || req.query.username;
     const email = req.query.email;
 
-    if (!id && !email) return res.redirect('/users/all');
-    if (id && !mongoose.Types.ObjectId.isValid(id)) return res.status(405).json({message: "id de usuário inválido"})
-
+    if (!username && !email) return res.redirect('/users/all');
     try {
 
         const user = await User.findOne(
-            { $or: [{_id: id}, {email}] })
+            { $or: [{email}, {username: username}] })
                 .select('-password -refreshToken')
                 .lean().exec();
         if (!user) return res.status(404).json({message: 'Usuário não foi encontrado.'});
@@ -67,8 +68,8 @@ export const getUser = async (req, res) => {
  */
 export const createUser = async (req, res) => {
     // #swagger.tags = ['Users']
-    const {name, email, password, confirmPassword, birthDate, country, state, roles, active} = req.body;
-    if (!name || !email || !password) return res.status(400).json({message: 'Nome, email e senha são campos obrigatórios.'});
+    const {name, email, username, password, confirmPassword, birthDate, country, state, roles, active} = req.body;
+    if (!name || !email || !password || !username) return res.status(400).json({message: 'Nome, email, username e senha são campos obrigatórios.'});
 
     try {
         const contract = new ValidationContract();
@@ -78,6 +79,11 @@ export const createUser = async (req, res) => {
         contract.hasMinLen(name, 3, 'O nome deve conter pelo menos 3 caracteres. ');
         contract.hasMaxLen(name, 255, 'O nome deve conter no máximo 255 caracteres. ');
         
+        //Validações de usuário
+        contract.isRequired(username, 'O nome de usuário é obrigatório. ');
+        contract.hasMinLen(username, 3, 'O nome de usuário deve conter pelo menos 3 caracteres. ');
+        contract.hasMaxLen(username, 255, 'O nome de usuário deve conter no máximo 255 caracteres. ');
+
         //Validações de e-mail
         contract.isEmail(email, 'E-mail inválido. ');
         contract.isRequired(email, 'O e-mail é obrigatório. ');
@@ -104,6 +110,7 @@ export const createUser = async (req, res) => {
         const newUser = {
             name,
             email,
+            username,
             password : hashPwd,
             birthDate,
             country,
@@ -131,9 +138,9 @@ export const updateUser = async (req, res) => {
     /* #swagger.security = [{
             "bearerAuth": []
     }] */
-    const {id, name, email, password, birthDate, country, state} = req.body;
+    const {id, name, email, username, password, birthDate, country, state} = req.body;
 
-    if (!name || !email || !password) return res.status(400).json({message: 'Nome, email e senha são campos obrigatórios.'});
+    if (!name || !email || !username) return res.status(400).json({message: 'Nome, email ou usuário são campos obrigatórios.'});
 
     try {
         const user = await User.findById(id).exec();
@@ -144,6 +151,11 @@ export const updateUser = async (req, res) => {
         //Validações de nome
         contract.hasMinLen(name, 3, 'O nome deve conter pelo menos 3 caracteres. ');
         contract.hasMaxLen(name, 255, 'O nome deve conter no máximo 255 caracteres. ');
+
+        //Validações de usuário
+        contract.isRequired(username, 'O nome de usuário é obrigatório. ');
+        contract.hasMinLen(username, 3, 'O nome de usuário deve conter pelo menos 3 caracteres. ');
+        contract.hasMaxLen(username, 255, 'O nome de usuário deve conter no máximo 255 caracteres. ');
         
         //Validações de e-mail
         contract.isEmail(email, 'E-mail inválido. ');
@@ -158,6 +170,7 @@ export const updateUser = async (req, res) => {
         contract.hasMinLen(password, 6, 'A senha deve conter pelo menos 6 caracteres. ');
 
         user.name = name ?? user.name;
+        user.username = username ?? user.username;
         user.email = email ?? user.email;
         user.birthDate = birthDate ?? user.birthDate;
         user.country = country ?? user.country;
@@ -204,4 +217,39 @@ export const deleteUser = async (req, res) => {
     } catch (err) {
         res.status(500).json(err.message);
     } 
+}
+
+
+/**
+ * @desc GET Recomendações de jogos para um usuário
+ * @route GET /users/:id/recommendations
+ * @access PRIVATE
+ */
+export const getRecommendations = async (req, res) => {
+
+    const limit = req.query.max || 10;
+    const userID = req.params.id;
+    if (!isValidObjectId(userID)) return res.status(400).send({message: "Usuário inválido."});
+
+    try {
+        const user = await User.findById(userID).select('-password').lean().exec();
+        if (!user) return res.sendStatus(404);
+
+        const topRatings = await Rating.find({user: userID}).sort({score: 'desc'}).limit(5).exec(); 
+        const favouriteCategory = topRatings.map(async (rating) => {
+            const game = await Game.findById(rating.game).exec();
+            const category = game.category;
+            // console.log(category);
+            return category;
+        })
+        console.log(favouriteCategory)
+        
+        const gameRecommendations = await Game.find({category: {$in: favouriteCategory}}).limit(limit).exec();
+        res.json(gameRecommendations);
+        
+
+    } catch (err){
+        res.status(500).json(err.message);
+    }
+
 }

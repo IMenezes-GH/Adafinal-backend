@@ -39,6 +39,7 @@ export default class ValidationContract {
         return errors.length == 0;
     }
     isOlder(value, min, message){
+        if (!value) {return}
         const data = value.split('-');
         const parsedDate = new Date(Number(data[0])+min, Number(data[1])-1, Number(data[2]))
         if (!value || parsedDate >= new Date()){

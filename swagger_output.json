@@ -5,6 +5,7 @@
     "description": "API Backend do Best Browser Games",
     "version": "1.0.0"
   },
+  "host": "localhost:3000",
   "basePath": "/",
   "tags": [
     {
@@ -179,7 +180,7 @@
         "description": "",
         "parameters": [
           {
-            "name": "id",
+            "name": "username",
             "in": "query",
             "type": "string"
           },
@@ -195,9 +196,6 @@
           },
           "404": {
             "description": "Not Found"
-          },
-          "405": {
-            "description": "Method Not Allowed"
           },
           "500": {
             "description": "Internal Server Error"
@@ -223,6 +221,9 @@
                   "example": "any"
                 },
                 "email": {
+                  "example": "any"
+                },
+                "username": {
                   "example": "any"
                 },
                 "password": {
@@ -328,6 +329,9 @@
                 "email": {
                   "example": "any"
                 },
+                "username": {
+                  "example": "any"
+                },
                 "password": {
                   "example": "any"
                 },
@@ -389,6 +393,11 @@
             "name": "name",
             "in": "query",
             "type": "string"
+          },
+          {
+            "name": "username",
+            "in": "query",
+            "type": "string"
           }
         ],
         "responses": {
@@ -404,7 +413,7 @@
         }
       }
     },
-    "/users/{id}": {
+    "/users/{username}": {
       "get": {
         "tags": [
           "Users"
@@ -412,13 +421,13 @@
         "description": "",
         "parameters": [
           {
-            "name": "id",
+            "name": "username",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
-            "name": "id",
+            "name": "username",
             "in": "query",
             "type": "string"
           },
@@ -435,8 +444,37 @@
           "404": {
             "description": "Not Found"
           },
-          "405": {
-            "description": "Method Not Allowed"
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/{id}/recommendations": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "max",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
