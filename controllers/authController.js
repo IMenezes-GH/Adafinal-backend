@@ -36,6 +36,7 @@ export const handleLogin = async (req, res) => {
                 id: user._id,
                 email : user.email,
                 name: user.name,
+                username: user.username,
                 birthdate: user.birthdate,
                 country: user.country,
                 state: user.state,
@@ -49,7 +50,11 @@ export const handleLogin = async (req, res) => {
         )
 
         const refreshToken = jwt.sign(
-            { id: user._id, email: user.email, lastLogin: user.lastLogin },
+            { 
+                id: user._id,
+                email: user.email, 
+                username: user.username,
+                lastLogin: user.lastLogin },
             process.env.REFRESH_TOKEN_SECRET,
             { expiresIn: '3d' }
         )
@@ -144,6 +149,7 @@ export const handleRefresh = async (req, res) => {
                         id: foundUser._id,
                         email : foundUser.email,
                         name: foundUser.name,
+                        username: foundUser.username,
                         birthdate: foundUser.birthdate,
                         country: foundUser.country,
                         state: foundUser.state,
@@ -158,6 +164,7 @@ export const handleRefresh = async (req, res) => {
 
                 const newRefreshToken = jwt.sign({
                     id: foundUser._id,
+                    username: foundUser.username,
                     email: foundUser.email,
                     lastLogin: lastLogin
                     },
