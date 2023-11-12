@@ -331,6 +331,12 @@
                 "username": {
                   "example": "any"
                 },
+                "description": {
+                  "example": "any"
+                },
+                "profileImageURL": {
+                  "example": "any"
+                },
                 "password": {
                   "example": "any"
                 },

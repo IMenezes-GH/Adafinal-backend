@@ -14,6 +14,17 @@ const userSchema = Schema({
         trim: true,
     },
 
+    description: {
+        type: Schema.Types.String,
+        trim: true
+    },
+
+    profileImageURL: {
+        type: Schema.Types.String,
+        trim: true
+    },
+
+
     email: {
         type: Schema.Types.String,
         required: [true, 'O e-mail é obrigatório. '],

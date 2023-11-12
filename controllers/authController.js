@@ -20,7 +20,6 @@ export const handleLogin = async (req, res) => {
     if (!email || !password) return res.status(400).send({message: 'Email e senha são campos obrigatórios.'});
 
     try {
-
         const user = await User.findOne({email}).exec();
         if (!user) return res.status(404).send({message: 'Email ou senha incorreta.'});
 
@@ -36,6 +35,7 @@ export const handleLogin = async (req, res) => {
             birthdate: user.birthdate,
             country: user.country,
             state: user.state,
+            description: user.description,
             roles: user.roles,
             lastLogin: lastLogin
         }
@@ -151,6 +151,7 @@ export const handleRefresh = async (req, res) => {
                     birthdate: foundUser.birthdate,
                     country: foundUser.country,
                     state: foundUser.state,
+                    description: foundUser.description,
                     roles: foundUser.roles,
                     lastLogin: lastLogin
                 }

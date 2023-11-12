@@ -4,6 +4,13 @@ import bcrypt from 'bcrypt';
 import ValidationContract from '../validation/validationContract.js';
 import Rating from '../models/Rating.js';
 import Game from '../models/Game.js';
+import jwt from 'jsonwebtoken'
+import chalk from 'chalk';
+import { stringToBool } from '../util/parseUtil.js';
+
+const SECURE_COOKIES = stringToBool(process.env.SECURE_COOKIES ?? 'true'); // Ambiente de desenvolvimento false, Prod TRUE
+console.log(chalk.bold.yellowBright(`SECURE_COOKIES IS SET TO: ${chalk.underline.blueBright(SECURE_COOKIES)}`))
+
 
 /**
  * @desc Recupera uma lista de usuários
@@ -138,16 +145,14 @@ export const updateUser = async (req, res) => {
     /* #swagger.security = [{
             "bearerAuth": []
     }] */
-    const {id, name, email, username, password, birthDate, country, state} = req.body;
+    const {id, name, email, username, description, profileImageURL, password, birthDate, country, state} = req.body;
 
-    if (!name || !email || !username) return res.status(400).json({message: 'Nome, email ou usuário são campos obrigatórios.'});
-
+    if (!name && !email && !username) return res.status(400).json({message: 'Nome, email ou usuário são campos obrigatórios.'});
     try {
         const user = await User.findById(id).exec();
         if (!user.active) return res.sendStatus(403);
 
         const contract = new ValidationContract();
-        
         //Validações de nome
         contract.hasMinLen(name, 3, 'O nome deve conter pelo menos 3 caracteres. ');
         contract.hasMaxLen(name, 255, 'O nome deve conter no máximo 255 caracteres. ');
@@ -163,7 +168,6 @@ export const updateUser = async (req, res) => {
         contract.hasMaxLen(email, 128, 'O e-mail deve conter no máximo 128 caracteres. ');
 
         const duplicate = await User.findOne({email}).select('-password').lean().exec();
-        console.log(duplicate._id.toString(), id)
         if (duplicate && duplicate._id.toString() !== id) return res.sendStatus(409); // Conflito
         
         //Validações de senha
@@ -171,20 +175,67 @@ export const updateUser = async (req, res) => {
 
         user.name = name ?? user.name;
         user.username = username ?? user.username;
+        user.description = description ?? user.description;
+        user.profileImageURL = profileImageURL ?? user.profileImageURL;
         user.email = email ?? user.email;
         user.birthDate = birthDate ?? user.birthDate;
         user.country = country ?? user.country;
         user.state = state ?? user.state;
         
-
+        
         if (password) {
             const hashPwd = await bcrypt.hash(password, Number(process.env.SALT_KEY));
             user.password = hashPwd;
         }
-     
+        
         const updatedUser = await user.save();
-        if (updateUser){
-            return res.json({message: 'Usuário atualizado.', user: updatedUser});
+        // REGEN JWT
+
+        const userData = {
+            id: updatedUser._id,
+            email : updatedUser.email,
+            name: updatedUser.name,
+            username: updatedUser.username,
+            birthdate: updatedUser.birthdate,
+            country: updatedUser.country,
+            state: updatedUser.state,
+            description: updatedUser.description,
+            roles: updatedUser.roles,
+        }
+
+        const accessToken = jwt.sign(
+            userData,
+            process.env.ACCESS_TOKEN_SECRET,
+            {
+                expiresIn: '15m',
+            }
+        )
+
+        const refreshToken = jwt.sign(
+            { 
+                id: user._id,
+                email: user.email, 
+                username: user.username,
+                lastLogin: user.lastLogin },
+            process.env.REFRESH_TOKEN_SECRET,
+            { expiresIn: '3d' }
+        )
+    
+        updatedUser.refreshToken = refreshToken;
+        updatedUser.active = true;
+
+        await updatedUser.save();
+
+        if (updatedUser){
+            res.cookie('jwt',
+                refreshToken,
+                {
+                httpOnly: true,
+                secure: SECURE_COOKIES, // Habilitar em PROD
+                sameSite: 'None',
+                maxAge: 1000 * 60 * 60 * 24 * 3 } // 3 dias
+            )
+            return res.json({message: 'Usuário atualizado.', token: accessToken, user: userData});
         }
         else return res.sendStatus(400);
 

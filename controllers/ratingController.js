@@ -11,6 +11,7 @@ export const getRating = async (req, res) => {
     // #swagger.tags = ['Ratings']
     const {id, game, user, min, max} = req.query;
 
+
     try {
 
         if (!id && !game && !user) {
@@ -18,7 +19,7 @@ export const getRating = async (req, res) => {
             return res.json(allRatings);
         }
 
-        if (![id, game, user].every((objectId) => isValidObjectId(objectId))) return res.status(405).json({message: 'Id inválido'});
+        if (![id, game, user].some((objectId) => isValidObjectId(objectId))) return res.status(405).json({message: 'Id inválido'});
         
         const rating = await Rating.find(
             {$or: [{_id: id}, {game}, {user}]})
