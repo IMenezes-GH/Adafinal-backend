@@ -8,6 +8,7 @@ import swaggerUi from 'swagger-ui-express';
 import cookieParser from 'cookie-parser';
 
 import connectDB from './config/MongoConnect.js';
+import corsOptions from './config/corsOptions.js';
 
 
 import {generateSwaggerFile, loadSwaggerFile} from './swagger.js';
@@ -29,7 +30,7 @@ import mongoose from 'mongoose';
 
 const app = Express();
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(Express.urlencoded({extended: false}));
 app.use(Express.json());
 app.use('/auth', cookieParser());

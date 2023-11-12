@@ -6,7 +6,7 @@ import {stringToBool} from '../util/parseUtil.js';
 
 
 const SECURE_COOKIES = stringToBool(process.env.SECURE_COOKIES ?? 'true'); // Ambiente de desenvolvimento false, Prod TRUE
-console.log(chalk.bold.yellowBright(`SECURE_COOKIES IS SET TO: ${SECURE_COOKIES}`))
+console.log(chalk.bold.yellowBright(`SECURE_COOKIES IS SET TO: ${chalk.underline.blueBright(SECURE_COOKIES)}`))
 
 /**
  * @desc Login de usuário
@@ -16,33 +16,32 @@ console.log(chalk.bold.yellowBright(`SECURE_COOKIES IS SET TO: ${SECURE_COOKIES}
 export const handleLogin = async (req, res) => {
     // #swagger.tags = ['Auth']
 
-    const {email, password, confirmPassword} = req.body;
-    if (!email || !password || !confirmPassword) return res.status(400).send({message: 'Email e senhão são campos obrigatórios.'});
+    const {email, password} = req.body;
+    if (!email || !password) return res.status(400).send({message: 'Email e senha são campos obrigatórios.'});
 
     try {
-        
-        if (password !== confirmPassword) return res.status(401);
 
         const user = await User.findOne({email}).exec();
-        if (!user) return res.sendStatus(404);
+        if (!user) return res.status(404).send({message: 'Email ou senha incorreta.'});
 
         const match = await bcrypt.compare(password, user.password);
-        if (!match) return res.status(401).send({message: "Senha incorreta"});
+        if (!match) return res.status(401).send({message: "Email ou senha incorreta."});
 
         const lastLogin = new Date();
+        const userData = {
+            id: user._id,
+            email : user.email,
+            name: user.name,
+            username: user.username,
+            birthdate: user.birthdate,
+            country: user.country,
+            state: user.state,
+            roles: user.roles,
+            lastLogin: lastLogin
+        }
 
         const accessToken = jwt.sign(
-            {
-                id: user._id,
-                email : user.email,
-                name: user.name,
-                username: user.username,
-                birthdate: user.birthdate,
-                country: user.country,
-                state: user.state,
-                roles: user.roles,
-                lastLogin: lastLogin
-            },
+            userData,
             process.env.ACCESS_TOKEN_SECRET,
             {
                 expiresIn: '15m',
@@ -73,7 +72,7 @@ export const handleLogin = async (req, res) => {
             maxAge: 1000 * 60 * 60 * 24 * 3 } // 3 dias
         )
 
-        res.json({token: accessToken, user: user._id});
+        res.json({token: accessToken, user: userData});
 
     } catch (err){
         res.status(500).json({message: err.message});
@@ -144,18 +143,20 @@ export const handleRefresh = async (req, res) => {
 
                 const lastLogin = new Date();
 
+                const userData = {
+                    id: foundUser._id,
+                    email : foundUser.email,
+                    name: foundUser.name,
+                    username: foundUser.username,
+                    birthdate: foundUser.birthdate,
+                    country: foundUser.country,
+                    state: foundUser.state,
+                    roles: foundUser.roles,
+                    lastLogin: lastLogin
+                }
+
                 const newAccessToken = jwt.sign(
-                    {
-                        id: foundUser._id,
-                        email : foundUser.email,
-                        name: foundUser.name,
-                        username: foundUser.username,
-                        birthdate: foundUser.birthdate,
-                        country: foundUser.country,
-                        state: foundUser.state,
-                        roles: foundUser.roles,
-                        lastLogin: lastLogin
-                    },
+                    userData,
                     process.env.ACCESS_TOKEN_SECRET,
                     {
                         expiresIn: '15m',
@@ -185,7 +186,7 @@ export const handleRefresh = async (req, res) => {
                     maxAge: 1000 * 60 * 60 * 25 * 3}
                 )
             
-                res.json({token: newAccessToken, user: foundUser._id});
+                res.json({token: newAccessToken, user: userData});
             
             }    
     )
