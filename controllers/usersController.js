@@ -44,19 +44,20 @@ export const getUsers = async (req, res) => {
 
 /**
  * @desc GET um único usuário utilizando id ou email do usuário, por parâmetro ou query.
- * @route GET /users/:id, GET /users?id=param1
+ * @route GET /users/:username, GET /users?id=param1
  * @access PUBLIC
  */
 export const getUser = async (req, res) => {
     // #swagger.tags = ['Users']
     const username = req.params.username || req.query.username;
+    const id = req.query.id;
     const email = req.query.email;
 
-    if (!username && !email) return res.redirect('/users/all');
+    if (!username && !email && !id) return res.redirect('/users/all');
     try {
-
+        console.log(req.params, req.query)
         const user = await User.findOne(
-            { $or: [{email}, {username: username}] })
+            { $or: [{email}, {username: username}, {_id: id}] })
                 .select('-password -refreshToken')
                 .lean().exec();
         if (!user) return res.status(404).json({message: 'Usuário não foi encontrado.'});

@@ -10,8 +10,8 @@ import { isValidObjectId } from "mongoose";
 export const getRating = async (req, res) => {
     // #swagger.tags = ['Ratings']
     const {id, game, user, min, max} = req.query;
-
-
+    
+    console.log(req.query);
     try {
 
         if (!id && !game && !user) {
@@ -43,6 +43,7 @@ export const createRating = async(req, res) => {
             "bearerAuth": []
     }] */
     const {score, description, game, user} = req.body;
+    console.log(req.body);
     try {
         const data= {
             score,
@@ -52,6 +53,7 @@ export const createRating = async(req, res) => {
         }
 
         const newRating = await Rating.create(data);
+        console.log(newRating);
         res.json(newRating);
 
     } catch (err){

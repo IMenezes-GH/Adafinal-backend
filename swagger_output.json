@@ -5,6 +5,7 @@
     "description": "API Backend do Best Browser Games",
     "version": "1.0.0"
   },
+  "host": "localhost:3000",
   "basePath": "/",
   "tags": [
     {
@@ -180,6 +181,11 @@
         "parameters": [
           {
             "name": "username",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "id",
             "in": "query",
             "type": "string"
           },
@@ -433,6 +439,11 @@
           },
           {
             "name": "username",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "id",
             "in": "query",
             "type": "string"
           },
