@@ -6,6 +6,7 @@ import chalk from 'chalk';
 import Express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import cookieParser from 'cookie-parser';
+import requestLogger from './middleware/Logger.js';
 
 import connectDB from './config/MongoConnect.js';
 import corsOptions from './config/corsOptions.js';
@@ -33,6 +34,9 @@ const app = Express();
 app.use(cors(corsOptions));
 app.use(Express.urlencoded({extended: false}));
 app.use(Express.json());
+app.use(requestLogger);
+
+
 app.use('/auth', cookieParser());
 
 
