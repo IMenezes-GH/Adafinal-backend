@@ -11,7 +11,6 @@ export const getRating = async (req, res) => {
     // #swagger.tags = ['Ratings']
     const {id, game, user, min, max} = req.query;
     
-    console.log(req.query);
     try {
 
         if (!id && !game && !user) {

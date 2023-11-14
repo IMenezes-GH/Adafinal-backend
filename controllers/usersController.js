@@ -78,7 +78,7 @@ export const createUser = async (req, res) => {
     // #swagger.tags = ['Users']
     const {name, email, username, password, confirmPassword, birthDate, country, state, roles, active} = req.body;
     if (!name || !email || !password || !username) return res.status(400).json({message: 'Nome, email, username e senha são campos obrigatórios.'});
-
+    console.log(req);
     try {
         const contract = new ValidationContract();
         
@@ -128,6 +128,7 @@ export const createUser = async (req, res) => {
         }
         
         const createdUser = await User.create(newUser);
+        console.log('usuário criado:', createUser)
         res.status(201).json({message: `Usuário: ${createdUser._id} criado.`});
 
     } catch (err) {
@@ -291,10 +292,9 @@ export const getRecommendations = async (req, res) => {
         const favouriteCategory = topRatings.map(async (rating) => {
             const game = await Game.findById(rating.game).exec();
             const category = game.category;
-            // console.log(category);
+         
             return category;
         })
-        console.log(favouriteCategory)
         
         const gameRecommendations = await Game.find({category: {$in: favouriteCategory}}).limit(limit).exec();
         res.json(gameRecommendations);

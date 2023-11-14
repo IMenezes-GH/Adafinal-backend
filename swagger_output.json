@@ -5,6 +5,7 @@
     "description": "API Backend do Best Browser Games",
     "version": "1.0.0"
   },
+  "host": "localhost:3000",
   "basePath": "/",
   "tags": [
     {

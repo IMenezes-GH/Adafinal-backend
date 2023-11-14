@@ -9,6 +9,7 @@ import ValidationContract from '../validation/validationContract.js';
  */
 export const getAllGames = async (req, res) => {
     // #swagger.tags = ['Games']
+
     try {
         const games = await Game.find().lean().exec();
         res.json(games);
