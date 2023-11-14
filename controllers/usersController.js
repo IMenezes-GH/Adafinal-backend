@@ -55,7 +55,6 @@ export const getUser = async (req, res) => {
 
     if (!username && !email && !id) return res.redirect('/users/all');
     try {
-        console.log(req.params, req.query)
         const user = await User.findOne(
             { $or: [{email}, {username: username}, {_id: id}] })
                 .select('-password -refreshToken')
@@ -78,7 +77,6 @@ export const createUser = async (req, res) => {
     // #swagger.tags = ['Users']
     const {name, email, username, password, confirmPassword, birthDate, country, state, roles, active} = req.body;
     if (!name || !email || !password || !username) return res.status(400).json({message: 'Nome, email, username e senha são campos obrigatórios.'});
-    console.log(req);
     try {
         const contract = new ValidationContract();
         
@@ -128,7 +126,7 @@ export const createUser = async (req, res) => {
         }
         
         const createdUser = await User.create(newUser);
-        console.log('usuário criado:', createUser)
+        console.log(chalk.blue('usuário criado:', createUser))
         res.status(201).json({message: `Usuário: ${createdUser._id} criado.`});
 
     } catch (err) {

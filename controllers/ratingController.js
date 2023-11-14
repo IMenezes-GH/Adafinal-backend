@@ -42,7 +42,7 @@ export const createRating = async(req, res) => {
             "bearerAuth": []
     }] */
     const {score, description, game, user} = req.body;
-    console.log(req.body);
+
     try {
         const data= {
             score,
@@ -52,7 +52,6 @@ export const createRating = async(req, res) => {
         }
 
         const newRating = await Rating.create(data);
-        console.log(newRating);
         res.json(newRating);
 
     } catch (err){
