@@ -27,6 +27,9 @@ Instruções para realizar o deploy do projeto self-hosted pela vercel.
     REFRESH_TOKEN_SECRET=(outra chave, diferente da chave anterior)   
     SALT_KEY=10  
     SECURE_COOKIES=true  
+    USE_DEVELOPMENT_ORIGINS=true (se não configurar, ou deixar false não dá para testar o frontend pelo localhost!)
+    PROD_ORIGIN= (a URL onde está seu front-end)
+
 
 <img src="./docs/Screenshot_20231108_201113.png" />
 
