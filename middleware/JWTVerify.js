@@ -2,7 +2,6 @@ import jwt from "jsonwebtoken";
 
 const JWTVerify = (req, res, next) => {
     const authHeader = req.headers.authorization || req.header.Authorization;
-
     if (!authHeader?.startsWith('Bearer')) return res.sendStatus(401);
     const token = authHeader.split(' ')[1];
     
@@ -12,6 +11,7 @@ const JWTVerify = (req, res, next) => {
         (err, decoded) => {
             if (err && decoded?.roles !== 'admin') return res.sendStatus(403);
             req.userData = decoded;
+            console.log(req.userData.username, ' Passed.');
             next()
             
         }

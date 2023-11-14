@@ -84,7 +84,7 @@ export const createGame = async (req, res) => {
         
         //Validações de descrição
         contract.hasMinLen(description, 3, 'A descrição deve conter pelo menos 3 caracteres. ');
-        contract.hasMaxLen(description, 128, 'A descrição deve conter no máximo 128 caracteres. ');
+        contract.hasMaxLen(description, 500, 'A descrição deve conter no máximo 500 caracteres. ');
 
 
         if(!contract.isValid()){

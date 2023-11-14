@@ -55,9 +55,8 @@ export const createNewCategory = async(req, res) => {
             name,
             active: active || true
         }
-
         const category = await Category.create(newCategory);
-        if (category) return res.sendStatus(201);
+        if (category) return res.status(201).send({message: 'Categoria criada.'});
 
     } catch (err){
         res.json({message: err.message})
