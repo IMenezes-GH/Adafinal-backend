@@ -54,7 +54,7 @@ export const getGameById = async (req, res) => {
     try {
         const game = await Game.findById(id).exec();
         if (!game) return res.status(404).json({message: 'Jogo não foi encontrado.'});
-        console.log(game);
+    
         res.json(game);
 
     } catch (err) {
