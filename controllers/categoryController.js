@@ -9,14 +9,13 @@ import { stringToBool } from "../util/parseUtil.js";
 export const getCategory = async(req, res) => {
     // #swagger.tags = ['Category']
 
-    const _id = req.body._id;
-    const name = req.query.name || req.params._id;
+    const {name, _id}= req.query;
 
     try {
-        if (name) {
+        if (name || _id) {
             const category = await Category.findOne(
                 {$or: [
-                    {name: {$regex: name, $options: 'i'}}, 
+                    {name: {$regex: name || '', $options: 'i'}}, 
                     {_id: _id}
                 ]})
                 .lean().exec();
