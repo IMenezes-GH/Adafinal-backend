@@ -9,15 +9,15 @@ import { stringToBool } from "../util/parseUtil.js";
 export const getCategory = async(req, res) => {
     // #swagger.tags = ['Category']
 
-    const id = req.body.id;
-    const name = req.query.name || req.params.id;
+    const _id = req.body._id;
+    const name = req.query.name || req.params._id;
 
     try {
         if (name) {
             const category = await Category.findOne(
                 {$or: [
                     {name: {$regex: name, $options: 'i'}}, 
-                    {_id: id}
+                    {_id: _id}
                 ]})
                 .lean().exec();
 
@@ -74,11 +74,11 @@ export const updateCategory = async (req, res) => {
             "bearerAuth": []
     }] */
 
-    const {id, name, newname, active} = req.body;
-    if (!id && !name) return res.sendStatus(400); // Pelo menos um dos atributos é necessário
+    const {_id, name, newname, active} = req.body;
+    if (!_id && !name) return res.sendStatus(400); // Pelo menos um dos atributos é necessário
 
     try {
-        const category = await Category.findOne({$or: [{name}, {_id: id}]}).exec();
+        const category = await Category.findOne({$or: [{name}, {_id}]}).exec();
         if (!category) return res.sendStatus(404);
 
         if (newname) {

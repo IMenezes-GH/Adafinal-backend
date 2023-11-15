@@ -43,20 +43,20 @@ export const getUsers = async (req, res) => {
 
 
 /**
- * @desc GET um único usuário utilizando id ou email do usuário, por parâmetro ou query.
- * @route GET /users/:username, GET /users?id=param1
+ * @desc GET um único usuário utilizando _id ou email do usuário, por parâmetro ou query.
+ * @route GET /users/:username, GET /users?_id=param1
  * @access PUBLIC
  */
 export const getUser = async (req, res) => {
     // #swagger.tags = ['Users']
     const username = req.params.username || req.query.username;
-    const id = req.query.id;
+    const _id = req.query._id;
     const email = req.query.email;
 
-    if (!username && !email && !id) return res.redirect('/users/all');
+    if (!username && !email && !_id) return res.redirect('/users/all');
     try {
         const user = await User.findOne(
-            { $or: [{email}, {username: username}, {_id: id}] })
+            { $or: [{email}, {username: username}, {_id: _id}] })
                 .select('-password -refreshToken')
                 .lean().exec();
         if (!user) return res.status(404).json({message: 'Usuário não foi encontrado.'});
@@ -145,11 +145,11 @@ export const updateUser = async (req, res) => {
     /* #swagger.security = [{
             "bearerAuth": []
     }] */
-    const {id, name, email, username, description, profileImageURL, password, birthDate, country, state} = req.body;
+    const {_id, name, email, username, description, profileImageURL, password, birthDate, country, state} = req.body;
 
     if (!name && !email && !username) return res.status(400).json({message: 'Nome, email ou usuário são campos obrigatórios.'});
     try {
-        const user = await User.findById(id).exec();
+        const user = await User.findById(_id).exec();
         if (!user.active) return res.sendStatus(403);
 
         const contract = new ValidationContract();
@@ -168,7 +168,7 @@ export const updateUser = async (req, res) => {
         contract.hasMaxLen(email, 128, 'O e-mail deve conter no máximo 128 caracteres. ');
 
         const duplicate = await User.findOne({email}).select('-password').lean().exec();
-        if (duplicate && duplicate._id.toString() !== id) return res.sendStatus(409); // Conflito
+        if (duplicate && duplicate._id.toString() !== _id) return res.sendStatus(409); // Conflito
         
         //Validações de senha
         contract.hasMinLen(password, 6, 'A senha deve conter pelo menos 6 caracteres. ');
@@ -192,7 +192,7 @@ export const updateUser = async (req, res) => {
         // REGEN JWT
 
         const userData = {
-            id: updatedUser._id,
+            _id: updatedUser._id,
             email : updatedUser.email,
             name: updatedUser.name,
             username: updatedUser.username,
@@ -213,7 +213,7 @@ export const updateUser = async (req, res) => {
 
         const refreshToken = jwt.sign(
             { 
-                id: user._id,
+                _id: user._id,
                 email: user.email, 
                 username: user.username,
                 lastLogin: user.lastLogin },
@@ -254,11 +254,11 @@ export const deleteUser = async (req, res) => {
     /* #swagger.security = [{
         "bearerAuth": []
     }] */
-    const {id} = req.body;
-    if (!id) return res.status(400).json({message: 'Id é obrigatório'});
+    const {_id} = req.body;
+    if (!_id) return res.status(400).json({message: 'Id é obrigatório'});
 
     try {
-        const user = await User.findById(id).exec();
+        const user = await User.findById(_id).exec();
         if (!user.active) return res.sendStatus(403);
         if (!user) return res.sendStatus(404);
 
@@ -273,13 +273,13 @@ export const deleteUser = async (req, res) => {
 
 /**
  * @desc GET Recomendações de jogos para um usuário
- * @route GET /users/:id/recommendations
+ * @route GET /users/:_id/recommendations
  * @access PRIVATE
  */
 export const getRecommendations = async (req, res) => {
 
     const limit = req.query.max || 10;
-    const userID = req.params.id;
+    const userID = req.params._id;
     if (!isValidObjectId(userID)) return res.status(400).send({message: "Usuário inválido."});
 
     try {

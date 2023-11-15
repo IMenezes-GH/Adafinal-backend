@@ -41,18 +41,18 @@ export const getGamesByName = async (req, res) => {
 
 /**
  * @desc Recupera um jogo por ID
- * @route GET /games/:id
+ * @route GET /games/:_id
  * @access PUBLIC
  */
 export const getGameById = async (req, res) => {
     // #swagger.tags = ['Games']
 
-    const id = req.params.id;
-
-    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(400).json({message: "id de jogo inválido"})
+    const _id = req.params._id;
+    
+    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(400).json({message: "_id de jogo inválido"})
 
     try {
-        const game = await Game.findById(id).exec();
+        const game = await Game.findById(_id).exec();
         if (!game) return res.status(404).json({message: 'Jogo não foi encontrado.'});
     
         res.json(game);
@@ -122,12 +122,12 @@ export const updateGame = async (req, res) => {
     /* #swagger.security = [{
             "bearerAuth": []
     }] */
-    const {id, name, description, category, url, imageURL, videoURL, active, score, ratings} = req.body;
-    if (!id) return res.status(400).json({message: 'Id obrigatórios'});
+    const {_id, name, description, category, url, imageURL, videoURL, active, score, ratings} = req.body;
+    if (!_id) return res.status(400).json({message: 'Id obrigatórios'});
 
     try {
         const contract = new ValidationContract();
-        const game = await Game.findById(id).exec();
+        const game = await Game.findById(_id).exec();
         
         //Validações de nome
         if (name){
@@ -176,11 +176,11 @@ export const deleteGame = async (req, res) => {
     /* #swagger.security = [{
             "bearerAuth": []
     }] */
-    const {id} = req.body;
-    if (!id) return res.status(400).json({message: 'Id é obrigatório'});
+    const {_id} = req.body;
+    if (!_id) return res.status(400).json({message: 'Id é obrigatório'});
 
     try {
-        const game = await Game.findById(id).exec();
+        const game = await Game.findById(_id).exec();
         if (!game) return res.sendStatus(404);
 
         const deletedGame = await game.deleteOne();

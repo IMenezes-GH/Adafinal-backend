@@ -5,24 +5,24 @@ import { isValidObjectId } from "mongoose";
 
 /**
  * @desc Pesquisa avaliações por jogo
- * @route GET /ratings?id=param1&game=param2&user=param3&min=param4&max=param5
+ * @route GET /ratings?_id=param1&game=param2&user=param3&min=param4&max=param5
  * @access PUBLIC
  */
 export const getRating = async (req, res) => {
     // #swagger.tags = ['Ratings']
-    const {id, game, user, min, max} = req.query;
+    const {_id, game, user, min, max} = req.query;
     
     try {
 
-        if (!id && !game && !user) {
+        if (!_id && !game && !user) {
             const allRatings = await Rating.find({}).lean().exec(); 
             return res.json(allRatings);
         }
 
-        if (![id, game, user].some((objectId) => isValidObjectId(objectId))) return res.status(405).json({message: 'Id inválido'});
+        if (![_id, game, user].some((objectId) => isValidObjectId(objectId))) return res.status(405).json({message: 'Id inválido'});
         
         const rating = await Rating.find(
-            {$or: [{_id: id}, {game}, {user}]})
+            {$or: [{_id: _id}, {game}, {user}]})
             .skip(min).limit(max)
             .lean().exec();
         res.json(rating);
@@ -80,13 +80,13 @@ export const updateRating = async (req, res) => {
     /* #swagger.security = [{
             "bearerAuth": []
     }] */
-    const {id, description, score} = req.body;
+    const {_id, description, score} = req.body;
 
     try {
 
-        if (!id || !isValidObjectId(id)) return res.status(400).json({message: "Id de avaliação está faltando ou inválido."});
+        if (!_id || !isValidObjectId(_id)) return res.status(400).json({message: "Id de avaliação está faltando ou inválido."});
 
-        const rating = await Rating.findById(id).exec();
+        const rating = await Rating.findById(_id).exec();
         if (!rating) return res.status(404).json({message: "Avaliação não existe."});
 
         rating.description = description ?? rating.description;

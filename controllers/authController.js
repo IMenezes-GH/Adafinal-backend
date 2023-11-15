@@ -28,7 +28,7 @@ export const handleLogin = async (req, res) => {
 
         const lastLogin = new Date();
         const userData = {
-            id: user._id,
+            _id: user._id,
             email : user.email,
             name: user.name,
             username: user.username,
@@ -51,7 +51,7 @@ export const handleLogin = async (req, res) => {
 
         const refreshToken = jwt.sign(
             { 
-                id: user._id,
+                _id: user._id,
                 email: user.email, 
                 username: user.username,
                 lastLogin: user.lastLogin },
@@ -126,8 +126,8 @@ export const handleRefresh = async (req, res) => {
             async (err, decoded) => {
                 if (err) return res.status(403).json({message: "Forbidden"});
                 
-                const id = decoded.id; // ID do usuário encontrado no cookie
-                const foundUser = await User.findById(id).exec();
+                const _id = decoded._id; // ID do usuário encontrado no cookie
+                const foundUser = await User.findById(_id).exec();
                 if (!foundUser) return res.sendStatus(404);
                 if (foundUser && refreshJWT !== foundUser.refreshToken){
                     // Acionado caso usuário tente utilizar um refreshToken com dados válidos, mas não atual.
@@ -145,7 +145,7 @@ export const handleRefresh = async (req, res) => {
                 const lastLogin = new Date();
 
                 const userData = {
-                    id: foundUser._id,
+                    _id: foundUser._id,
                     email : foundUser.email,
                     name: foundUser.name,
                     username: foundUser.username,
@@ -167,7 +167,7 @@ export const handleRefresh = async (req, res) => {
                 )
 
                 const newRefreshToken = jwt.sign({
-                    id: foundUser._id,
+                    _id: foundUser._id,
                     username: foundUser.username,
                     email: foundUser.email,
                     lastLogin: lastLogin

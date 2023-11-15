@@ -18,7 +18,7 @@ router.route('/all')
 router.route('/:username')
     .get(getUser);
 
-router.route('/:id/recommendations')
+router.route('/:_id/recommendations')
     .get(getRecommendations);
 
 export default router;

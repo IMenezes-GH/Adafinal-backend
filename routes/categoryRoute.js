@@ -10,7 +10,7 @@ router.route('/')
     .post(JWTVerify, verifyRole('admin'), createNewCategory)
     .patch(JWTVerify, verifyRole('admin'), updateCategory)
 
-router.route('/:id')
+router.route('/:_id')
     .get(getCategory)
 
 export default router;
