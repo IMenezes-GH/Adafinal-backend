@@ -7,7 +7,7 @@ console.log(chalk.bold.yellowBright(`USE_DEVELOPMENT_ORIGINS IS SET TO: ${chalk.
 
 const corsOptions = {
     origin: (origin, callback) => {
-        
+        console.log(origin)
         if (origin === PROD_ORIGIN || (useDevelopmentOrigins && DEV_ORIGINS.includes(origin))) {
             callback(null, true)
         } else {
