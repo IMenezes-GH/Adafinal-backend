@@ -145,7 +145,7 @@ export const updateUser = async (req, res) => {
     /* #swagger.security = [{
             "bearerAuth": []
     }] */
-    const {_id, name, email, username, description, profileImageURL, password, birthDate, country, state} = req.body;
+    const {_id, name, email, username, description, profileImageURL, bannerImageURL, password, birthDate, country, state} = req.body;
 
     if (!name && !email && !username) return res.status(400).json({message: 'Nome, email ou usuário são campos obrigatórios.'});
     try {
@@ -181,6 +181,7 @@ export const updateUser = async (req, res) => {
         user.birthDate = birthDate ?? user.birthDate;
         user.country = country ?? user.country;
         user.state = state ?? user.state;
+        user.bannerImageURL = bannerImageURL ?? user.bannerImageURL;
         
         
         if (password) {

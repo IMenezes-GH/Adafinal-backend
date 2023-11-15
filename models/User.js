@@ -24,6 +24,11 @@ const userSchema = Schema({
         trim: true
     },
 
+    bannerImageURL: {
+        type: Schema.Types.String,
+        trim: true
+    },
+
 
     email: {
         type: Schema.Types.String,
