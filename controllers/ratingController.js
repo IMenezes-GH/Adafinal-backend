@@ -1,4 +1,5 @@
 import Rating from "../models/Rating.js";
+import Game from '../models/Game.js';
 import { isValidObjectId } from "mongoose";
 
 
@@ -44,6 +45,10 @@ export const createRating = async(req, res) => {
     const {score, description, game, user} = req.body;
 
     try {
+        
+        const foundGame = await Game.findById(game).exec();
+        if (!foundGame) return res.status(404).json({message: "Esse Jogo não existe."});
+        
         const data= {
             score,
             description,
@@ -52,7 +57,13 @@ export const createRating = async(req, res) => {
         }
 
         const newRating = await Rating.create(data);
-        res.json(newRating);
+        if (newRating) {
+            foundGame.ratings.push(newRating._id)
+            await foundGame.save();
+            return res.json(newRating);
+        }
+
+        res.status(500).json({message: 'Não foi possível criar uma avaliação'})
 
     } catch (err){
         res.status(500).json(err.message);
