@@ -38,7 +38,8 @@ export const handleLogin = async (req, res) => {
             description: user.description,
             roles: user.roles,
             lastLogin: lastLogin,
-            profileImageURL: user.profileImageURL
+            profileImageURL: user.profileImageURL,
+            bannerImageURL: user.bannerImageURL
         }
 
         const accessToken = jwt.sign(
@@ -155,7 +156,8 @@ export const handleRefresh = async (req, res) => {
                     description: foundUser.description,
                     roles: foundUser.roles,
                     lastLogin: lastLogin,
-                    profileImageURL: foundUser.profileImageURL
+                    profileImageURL: foundUser.profileImageURL,
+                    bannerImageURL: foundUser.bannerImageURL
                 }
 
                 const newAccessToken = jwt.sign(
