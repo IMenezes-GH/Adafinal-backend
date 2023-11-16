@@ -33,13 +33,13 @@ export const getGamesByName = async (req, res) => {
     try {
         if (name){
             const games = await Game.find({name: {$regex: name}}).lean().exec();
-            res.json(games);
+            return res.json(games);
         }
         if (category){
             const games = await Game.find({category: category}).lean().exec();
-            res.json(games);
+            return res.json(games);
         }
-        else res.status(400).json({message: 'nenhum jogo encontrado'})
+        else return res.status(400).json({message: 'nenhum jogo encontrado'})
     } catch (err) {
         res.status(500).json(err.message);
     } 
