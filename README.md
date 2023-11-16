@@ -9,6 +9,10 @@
 
 Backend para resolução do projeto final do módulo de React do programa <Primeiro código> da ADA, utilizando um servidor express, deploy na Vercel e conexão com um cluster no MongoDB Atlas.  
 
+[Link para a documentação do backend (swagger)](https://adafinal-backend.vercel.app/api-docs/)  
+[Link para o código fonte do frontend deste projeto](https://github.com/IMenezes-GH/Adafinal-frontend)  
+[Link para o deploy do frontend deste projeto](https://adafinal-frontend.vercel.app/)  
+
 ## Instruções:
 Instruções para realizar o deploy do projeto self-hosted pela vercel.
 
