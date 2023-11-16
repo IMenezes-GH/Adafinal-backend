@@ -147,41 +147,40 @@ export const updateUser = async (req, res) => {
     }] */
     const {_id, name, email, username, description, profileImageURL, bannerImageURL, password, birthDate, country, state} = req.body;
 
-    if (!name && !email && !username) return res.status(400).json({message: 'Nome, email ou usuário são campos obrigatórios.'});
+    if (!_id) return res.status(400).json({message: '_id é um campo obrigatório.'});
     try {
         const user = await User.findById(_id).exec();
         if (!user.active) return res.sendStatus(403);
 
         const contract = new ValidationContract();
         //Validações de nome
-        contract.hasMinLen(name, 3, 'O nome deve conter pelo menos 3 caracteres. ');
-        contract.hasMaxLen(name, 255, 'O nome deve conter no máximo 255 caracteres. ');
-
+      
+            contract.hasMinLen(name, 3, 'O nome deve conter pelo menos 3 caracteres. ');
+            contract.hasMaxLen(name, 255, 'O nome deve conter no máximo 255 caracteres. ');
+        
         //Validações de usuário
-        contract.isRequired(username, 'O nome de usuário é obrigatório. ');
+     
         contract.hasMinLen(username, 3, 'O nome de usuário deve conter pelo menos 3 caracteres. ');
         contract.hasMaxLen(username, 255, 'O nome de usuário deve conter no máximo 255 caracteres. ');
         
         //Validações de e-mail
-        contract.isEmail(email, 'E-mail inválido. ');
-        contract.hasMinLen(email, 3, 'O e-mail deve conter pelo menos 3 caracteres. ');
-        contract.hasMaxLen(email, 128, 'O e-mail deve conter no máximo 128 caracteres. ');
+        if (email){
+            contract.hasMinLen(email, 3, 'O e-mail deve conter pelo menos 3 caracteres. ');
+            contract.hasMaxLen(email, 128, 'O e-mail deve conter no máximo 128 caracteres. ');
+    
+            const duplicate = await User.findOne({email}).select('-password').lean().exec();
+            if (duplicate && duplicate._id.toString() !== _id) return res.sendStatus(409); // Conflito
+        }
 
-        const duplicate = await User.findOne({email}).select('-password').lean().exec();
-        if (duplicate && duplicate._id.toString() !== _id) return res.sendStatus(409); // Conflito
-        
-        //Validações de senha
-        contract.hasMinLen(password, 6, 'A senha deve conter pelo menos 6 caracteres. ');
-
-        user.name = name ?? user.name;
-        user.username = username ?? user.username;
+        user.name = name || user.name;
+        user.username = username || user.username;
+        user.email = email || user.email;
+        user.birthDate = birthDate || user.birthDate;
+        user.country = country || user.country;
+        user.state = state || user.state;
         user.description = description ?? user.description;
-        user.profileImageURL = profileImageURL ?? user.profileImageURL;
-        user.email = email ?? user.email;
-        user.birthDate = birthDate ?? user.birthDate;
-        user.country = country ?? user.country;
-        user.state = state ?? user.state;
-        user.bannerImageURL = bannerImageURL ?? user.bannerImageURL;
+        user.profileImageURL = profileImageURL || user.profileImageURL;
+        user.bannerImageURL = bannerImageURL || user.bannerImageURL;
         
         
         if (password) {
@@ -202,6 +201,7 @@ export const updateUser = async (req, res) => {
             state: updatedUser.state,
             description: updatedUser.description,
             roles: updatedUser.roles,
+            bannerImageURL: updatedUser.bannerImageURL
         }
 
         const accessToken = jwt.sign(
