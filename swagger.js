@@ -22,7 +22,13 @@ const doc = {
       title: 'Best Browser Games API',
       description: 'API Backend do Best Browser Games'
     },
-    tags: [{name: 'Users'}, {name: 'Auth'}, {name: 'Ratings'}, {name: 'Games'}, {name: 'Category'}],
+    tags: [
+        {name: 'Users'}, 
+        {name: 'Auth'}, 
+        {name: 'Ratings'}, 
+        {name: 'Games'}, 
+        {name: 'Category'},
+        {name: 'News'}],
     schemes: ['https', 'http'],
     components: {
         securitySchemes:{

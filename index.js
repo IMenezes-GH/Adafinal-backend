@@ -26,6 +26,7 @@ import gameRoute from './routes/gameRoute.js';
 import ratingRoute from './routes/ratingRoute.js';
 import userRoute from './routes/userRoute.js';
 import authRoute from './routes/AuthRoute.js';
+import newsRoute from './routes/NewsRoute.js';
 
 import mongoose from 'mongoose';
 
@@ -44,12 +45,13 @@ app.use('/', root);
 app.use('/ratings', ratingRoute);
 app.use('/users', userRoute);
 app.use('/auth', authRoute);
+app.use('/games', gameRoute);
+app.use('/category', categoryRoute);
+app.use('/news', newsRoute);
 
 const CUSTOM_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(loadSwaggerFile(), {customCssUrl: CUSTOM_URL}));
 
-app.use('/games', gameRoute);
-app.use('/category', categoryRoute);
 
 // 404
 app.all('*', (req, res) => {
