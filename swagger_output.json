@@ -21,6 +21,9 @@
     },
     {
       "name": "Category"
+    },
+    {
+      "name": "News"
     }
   ],
   "schemes": [
@@ -46,7 +49,7 @@
         "description": "",
         "parameters": [
           {
-            "name": "id",
+            "name": "_id",
             "in": "query",
             "type": "string"
           },
@@ -115,6 +118,9 @@
           "200": {
             "description": "OK"
           },
+          "404": {
+            "description": "Not Found"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -137,7 +143,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
+                "_id": {
                   "example": "any"
                 },
                 "description": {
@@ -184,7 +190,7 @@
             "type": "string"
           },
           {
-            "name": "id",
+            "name": "_id",
             "in": "query",
             "type": "string"
           },
@@ -282,7 +288,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
+                "_id": {
                   "example": "any"
                 }
               }
@@ -324,7 +330,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
+                "_id": {
                   "example": "any"
                 },
                 "name": {
@@ -340,6 +346,9 @@
                   "example": "any"
                 },
                 "profileImageURL": {
+                  "example": "any"
+                },
+                "bannerImageURL": {
                   "example": "any"
                 },
                 "password": {
@@ -442,7 +451,7 @@
             "type": "string"
           },
           {
-            "name": "id",
+            "name": "_id",
             "in": "query",
             "type": "string"
           },
@@ -465,12 +474,12 @@
         }
       }
     },
-    "/users/{id}/recommendations": {
+    "/users/{_id}/recommendations": {
       "get": {
         "description": "",
         "parameters": [
           {
-            "name": "id",
+            "name": "_id",
             "in": "path",
             "required": true,
             "type": "string"
@@ -591,11 +600,19 @@
             "name": "name",
             "in": "query",
             "type": "string"
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "500": {
             "description": "Internal Server Error"
@@ -671,7 +688,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
+                "_id": {
                   "example": "any"
                 }
               }
@@ -710,7 +727,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
+                "_id": {
                   "example": "any"
                 },
                 "name": {
@@ -765,7 +782,7 @@
         ]
       }
     },
-    "/games/{id}": {
+    "/games/{_id}": {
       "get": {
         "tags": [
           "Games"
@@ -773,7 +790,7 @@
         "description": "",
         "parameters": [
           {
-            "name": "id",
+            "name": "_id",
             "in": "path",
             "required": true,
             "type": "string"
@@ -804,6 +821,11 @@
         "parameters": [
           {
             "name": "name",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "_id",
             "in": "query",
             "type": "string"
           }
@@ -871,7 +893,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
+                "_id": {
                   "example": "any"
                 },
                 "name": {
@@ -908,7 +930,7 @@
         ]
       }
     },
-    "/category/{id}": {
+    "/category/{_id}": {
       "get": {
         "tags": [
           "Category"
@@ -916,13 +938,18 @@
         "description": "",
         "parameters": [
           {
-            "name": "id",
+            "name": "_id",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
             "name": "name",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "_id",
             "in": "query",
             "type": "string"
           }
@@ -935,6 +962,151 @@
             "description": "Not Found"
           }
         }
+      }
+    },
+    "/news/": {
+      "get": {
+        "tags": [
+          "News"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "min",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "max",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "News"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "example": "any"
+                },
+                "body": {
+                  "example": "any"
+                },
+                "image": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "News"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "News"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "example": "any"
+                },
+                "title": {
+                  "example": "any"
+                },
+                "body": {
+                  "example": "any"
+                },
+                "image": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     }
   },
