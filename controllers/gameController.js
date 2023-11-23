@@ -32,7 +32,7 @@ export const getGamesByName = async (req, res) => {
 
     try {
         if (name){
-            const games = await Game.find({name: {$regex: name}}).lean().exec();
+            const games = await Game.find({name: {$regex: name, $options: 'i'}}).lean().exec();
             return res.json(games);
         }
         if (category){
